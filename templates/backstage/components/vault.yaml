@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: vault-plugin
+  description: Plugin to enable vault
+  annotations:
+    tomelin.io/vault: enabled
+  tags:
+    - vault
+    - plugin
+spec:
+  type: service
+  lifecycle: production
+  owner: user:guest
+  system: platform
