@@ -5,6 +5,9 @@ metadata:
   description: Plugin to enable vault
   annotations:
     tomelin.io/vault: enabled
+    tomelin.io/worklfow-namespace: tes
+    tomelin.io/worklfow-type: tes
+    tomelin.io/worklfow-name: tes
   tags:
     - vault
     - plugin
