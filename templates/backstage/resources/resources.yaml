@@ -26,7 +26,7 @@ spec:
   owner: team-a
   system: system001
   dependsOn:  
-  - system:default/system002
+  - system:system002
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Resource
@@ -38,7 +38,7 @@ spec:
   owner: team-a
   system: system001
   dependsOn:  
-  - resource:default/instance-dev
+  - resource:instance-dev
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Resource
@@ -50,8 +50,8 @@ spec:
   owner: team-a
   system: system001
   dependsOn:  
-  - resource:default/database
-  - resource:default/instance-dev
+  - resource:database
+  - resource:instance-dev
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Resource
@@ -63,5 +63,5 @@ spec:
   owner: team-a
   system: system001
   dependsOn:  
-  - resource:default/virtual-machine
-  - resource:default/instance-dev
+  - resource:virtual-machine
+  - resource:instance-dev
