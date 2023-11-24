@@ -6,17 +6,7 @@ metadata:
   description: payments
 spec:
   owner: team-a
----
-apiVersion: backstage.io/v1alpha1
-kind: System
-metadata:
-  name: system001
-  description: system01
-spec:
-  domain: payments
-  owner: team-a
-  dependsOn:  
-  - domain:payments
+
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Resource
@@ -28,7 +18,7 @@ spec:
   owner: team-a
   system: system001
   dependsOn:  
-  - system:system001
+  - domain:payments
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Resource
