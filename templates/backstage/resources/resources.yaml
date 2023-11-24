@@ -1,0 +1,66 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: payments
+  description: payments
+spec:
+  owner: team-a
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: system001
+  description: system01
+spec:
+  domain: payments
+  dependsOn:  
+  - domain:payments
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: instance-dev
+  description: Stores artist details
+spec:
+  type: database
+  owner: team-a
+  system: system001
+  dependsOn:  
+  - system:system001
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: database001
+  description: azure database
+spec:
+  type: database
+  owner: team-a
+  system: system001
+  dependsOn:  
+  - resource:database
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: virtualMachine
+  description: azure vm
+spec:
+  type: database
+  owner: team-a
+  system: system001
+  dependsOn:  
+  - resource:database
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: storageAcount
+  description: azure sta
+spec:
+  type: database
+  owner: team-a
+  system: system001
+  dependsOn:  
+  - resource:virtualMachine
