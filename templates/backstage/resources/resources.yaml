@@ -26,7 +26,7 @@ spec:
   owner: team-a
   system: system001
   dependsOn:  
-  - domain:payments
+  - system:system002
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Resource
