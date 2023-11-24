@@ -43,7 +43,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
-  name: virtualMachine
+  name: virtual-machine
   description: azure vm
 spec:
   type: database
@@ -63,5 +63,5 @@ spec:
   owner: team-a
   system: system001
   dependsOn:  
-  - resource:default/virtualMachine
+  - resource:default/virtual-machine
   - resource:default/instance-dev
