@@ -1,5 +1,13 @@
 ---
 apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  namespace: default
+  name: team-a
+spec:
+  type: team
+---
+apiVersion: backstage.io/v1alpha1
 kind: Domain
 metadata:
   name: payments
