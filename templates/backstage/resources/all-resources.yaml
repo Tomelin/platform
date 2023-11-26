@@ -37,6 +37,7 @@ spec:
   type: machine
   owner: team-a
   system: system001
+  children: ['resource:virtual-machine']
 ---
 apiVersion: backstage.io/v1alpha1
 kind: Resource
@@ -47,4 +48,3 @@ spec:
   type: network
   owner: team-a
   system: system001
-  dependsOn: ['resource:virtual-machine']
