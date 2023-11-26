@@ -5,4 +5,4 @@ metadata:
   description: A collection of all Backstage example resources
 spec:
   targets:
-    - ./all-resources.yaml
+    - https://github.com/Tomelin/platform/blob/main/templates/backstage/resources/all-resources.yaml
