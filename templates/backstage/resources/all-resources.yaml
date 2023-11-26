@@ -52,7 +52,7 @@ spec:
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: terraform-payments-module
+  name: terraform-product-payments
   description: payments
 spec:
   type: service
