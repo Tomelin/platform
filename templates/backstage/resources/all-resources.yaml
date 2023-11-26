@@ -1,0 +1,50 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: system001
+  description: system001
+spec:
+  owner: team-b
+  domain: sub-chapter
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: postgresql
+  description: Database of system001
+spec:
+  type: database
+  owner: team-a
+  system: system001
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: storage-account
+  description: Files of system001
+spec:
+  type: storage
+  owner: team-a
+  system: system001
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: virtual-machine
+  description: VM of system001
+spec:
+  type: machine
+  owner: team-a
+  system: system001
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: load-balancer
+  description: VM of system001
+spec:
+  type: network
+  owner: team-a
+  system: system001
+  dependsOn: ['resource:virtual-machine']
