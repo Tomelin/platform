@@ -9,7 +9,6 @@ spec:
     displayName: Backstage
     email: backstage@example.com
     picture: https://avatars.dicebear.com/api/identicon/backstage@example.com.svg?background=%23fff&margin=25
-  parent: infrastructure
   children: [team-a]
 ---
 apiVersion: backstage.io/v1alpha1
@@ -30,6 +29,16 @@ apiVersion: backstage.io/v1alpha1
 kind: Domain
 metadata:
   name: chapter
+  description: Everything related to chapter
+  title: Chapter
+spec:
+  owner: team-a
+  children: [sub-chapter]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: sub-chapter
   description: Everything related to chapter
   title: Chapter
 spec:
