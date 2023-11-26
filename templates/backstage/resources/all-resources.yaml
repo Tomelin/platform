@@ -4,7 +4,7 @@ metadata:
   name: backstage
   description: The backstage sub-department
 spec:
-  type: sub-department
+  type: department
   profile:
     displayName: Backstage
     email: backstage@example.com
