@@ -48,3 +48,14 @@ spec:
   type: network
   owner: team-a
   system: system001
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: terraform-payments-module
+  description: payments
+spec:
+  type: service
+  lifecycle: production
+  owner: team-a
+  system: system001
