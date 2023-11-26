@@ -39,7 +39,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Domain
 metadata:
   name: sub-chapter
-  description: Everything related to chapter
-  title: Chapter
+  description: Everything related to sub-chapter
+  title: sub-chapter
 spec:
   owner: team-a
