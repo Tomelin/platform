@@ -7,7 +7,8 @@ import { Config } from '@backstage/config';
 import {
   getRootLogger,
 } from '@backstage/backend-common';
-import { PluginTaskScheduler } from '@backstage/backend-tasks';
+import { PluginTaskScheduler, readTaskScheduleDefinitionFromConfig, TaskRunner } from '@backstage/backend-tasks';
+
 
 export class MyProvider implements EntityProvider {
   private readonly scheduleFn?: () => Promise<void>;
