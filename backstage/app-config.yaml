@@ -45,11 +45,18 @@ integrations:
 
 proxy:
   endpoints:
-    /snyk:
+    '/snyk':
       target: https://api.snyk.io/
       headers:
         User-Agent: tech-services/backstage-plugin/1.0
         Authorization: token snyk_cs_vJp_GEXC6G9PlPVYY6ExH8V7akbJ90nnhc9rZscMr5U__v1
+      pathRewrite:
+        "^/proxy/snyk/": "/"
+    '/sonarqube':
+      target: https://sonarcloud.io/api
+      allowedMethods: ['GET']
+      auth: "9b85fdd9bdf9afe7096bd7d757b753904f503895:"
+        # sonar 9b85fdd9bdf9afe7096bd7d757b753904f503895
         # clientID 5f5f3923-5806-4ba5-96e4-79205b8ea9fa
   ### Example for how to add a proxy endpoint for the frontend.
   ### A typical reason to do this is to handle HTTPS and CORS for internal services.
@@ -57,7 +64,9 @@ proxy:
   #   '/test':
   #     target: 'https://example.com'
   #     changeOrigin: true
-
+sonarqube:
+    baseUrl: https://sonarcloud.io
+    apiKey: 9b85fdd9bdf9afe7096bd7d757b753904f503895
 # Reference documentation http://backstage.io/docs/features/techdocs/configuration
 # Note: After experimenting with basic setup, use CI/CD to generate docs
 # and an external cloud storage when deploying TechDocs for production use-case.

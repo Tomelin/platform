@@ -174,7 +174,7 @@ const routes = (
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     {/* <Route path="/dynamic-form" element={<DynamicFormPage />} />
     <Route path="/new-page" element={<NewPage />} /> */}
-    {/* <Route path="/snyk" element={<EntitySnykContent />}/> */}
+    <Route path="/snyk" element={<EntitySnykContent />}/>
 
   </FlatRoutes>
 );

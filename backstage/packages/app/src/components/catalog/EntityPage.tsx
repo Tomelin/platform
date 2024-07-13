@@ -62,6 +62,9 @@ import {
   EntitySnykContent,
   isSnykAvailable,
 } from "backstage-plugin-snyk";
+import { EntitySonarQubeCard } from '@backstage-community/plugin-sonarqube';
+
+
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -107,13 +110,7 @@ const entityWarningContent = (
         </Grid>
       </EntitySwitch.Case>
     </EntitySwitch>
-    <EntitySwitch>
-      <EntitySwitch.Case if={isSnykAvailable}>
-        <Grid item md={3}>
-          <SnykOverview />
-        </Grid>
-      </EntitySwitch.Case>
-    </EntitySwitch>
+
     <EntitySwitch>
       <EntitySwitch.Case if={hasRelationWarnings}>
         <Grid item xs={12}>
@@ -121,7 +118,13 @@ const entityWarningContent = (
         </Grid>
       </EntitySwitch.Case>
     </EntitySwitch>
-
+    {/* <EntitySwitch>
+      <EntitySwitch.Case if={isSnykAvailable}>
+        <Grid item md={3}>
+          <SnykOverview />
+        </Grid>
+      </EntitySwitch.Case>
+    </EntitySwitch> */}
     <EntitySwitch>
       <EntitySwitch.Case if={hasCatalogProcessingErrors}>
         <Grid item xs={12}>
@@ -138,10 +141,12 @@ const overviewContent = (
     <Grid item md={6}>
       <EntityAboutCard variant="gridItem" />
     </Grid>
+    <Grid item md={6}>
+      <EntitySonarQubeCard variant="gridItem" />
+    </Grid>
     <Grid item md={6} xs={12}>
       <EntityCatalogGraphCard variant="gridItem" height={400} />
     </Grid>
-
     <Grid item md={4} xs={12}>
       <EntityLinksCard />
     </Grid>
@@ -156,11 +161,11 @@ const serviceEntityPage = (
     <EntityLayout.Route path="/" title="Overview">
       {overviewContent}
     </EntityLayout.Route>
-    {/* <EntityLayout.Route path="/snyk" title="Security">
-      <EntitySnykContent />
-    </EntityLayout.Route> */}
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
+    </EntityLayout.Route>
+    <EntityLayout.Route path="/snyk" title="Security">
+      <EntitySnykContent />
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/api" title="API">
