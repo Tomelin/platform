@@ -1,0 +1,9 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: desafio-stn
+  description: Desafio STN
+spec:
+  type: service
+  lifecycle: experimental
+  owner: tomelin

@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+  db:
+    # container_name: db_mysql
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_pwd
+      - MYSQL_ROOT_HOST="%"
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=pa55word
+      - MYSQL_HOST="%"
+      - MYSQL_DATABASE=keycloak
+    ports:
+      - "3306:3306"
+    # volumes:
+    #   - .docker/db/mysql:/var/lib/mysql
+  keycloak:
+    # container_name: keycloak
+    image: quay.io/keycloak/keycloak:23.0.7
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=mysql
+      # - KC_DB_URL=jdbc:mysql://db:3306/keycloak?createDatabaseIfNotExist=true&characterEncoding=UTF-8&rewriteBatchedStatements=true&enabledTLSProtocols=TLSv1,TLSv1.1,TLSv1.2
+      - KC_DB_USERNAME=admin
+      - KC_DB_PASSWORD=pa55word
+      - KC_DB_URL_HOST=db
+      - KC_DB_URL_PORT=3306
+      - KC_DB_SCHEMA=keycloak
+      - KC_LOG_LEVEL=info
+      - KC_METRICS_ENABLED=true
+    ports:
+      - 8080:8080
+    command: start-dev
+    depends_on:
+      - db
+
+
+# CREATE USER 'admin'@'%' IDENTIFIED BY 'pa55word';
+# CREATE USER 'admin'@'localhost' IDENTIFIED BY 'pa55word';
+# GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION;
+# GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION;
+# FLUSH PRIVILEGES;

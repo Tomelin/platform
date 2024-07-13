@@ -44,6 +44,13 @@ integrations:
     #   token: ${GHE_TOKEN}
 
 proxy:
+  endpoints:
+    /snyk:
+      target: https://api.snyk.io/
+      headers:
+        User-Agent: tech-services/backstage-plugin/1.0
+        Authorization: token snyk_cs_vJp_GEXC6G9PlPVYY6ExH8V7akbJ90nnhc9rZscMr5U__v1
+        # clientID 5f5f3923-5806-4ba5-96e4-79205b8ea9fa
   ### Example for how to add a proxy endpoint for the frontend.
   ### A typical reason to do this is to handle HTTPS and CORS for internal services.
   # endpoints:
@@ -56,41 +63,68 @@ proxy:
 # and an external cloud storage when deploying TechDocs for production use-case.
 # https://backstage.io/docs/features/techdocs/how-to-guides#how-to-migrate-from-techdocs-basic-to-recommended-deployment-approach
 techdocs:
-  builder: 'local' # Alternatives - 'external'
+  builder: 'local'  # Alternatives - 'external'
   generator:
     runIn: 'docker' # Alternatives - 'local'
   publisher:
-    type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
+    type: 'local'   # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
 auth:
-  # see https://backstage.io/docs/auth/ to learn about auth providers
-  providers: {}
+  environment: development
+  session:
+    secret: backstage
+  providers:
+    # auth0:
+    #   development:
+    #     clientId: BMJfomTEGA4Mo3i0hg57qcUBx0WoVsnW
+    #     clientSecret: IrACsVGa46zcEF7lFM-466RnnbGk3UQKHxumLWJPC-FK3hZ59tkXj2eZR2HVA3BS
+    #     domain: tomelin.us.auth0.com
+    #     audience: https://tomelin.us.auth0.com/api/v2/
+    keycloak:
+      development:
+        clientId: backstage
+        clientSecret: Q3XY5BpykWvKMwhqUdL3txBXIO9ZL8kA
+        authorizationUrl: http://localhost:8080/realms/synera-com-br/protocol/openid-connect/auth
+        tokenUrl: http://localhost:8080/realms/synera-com-br/protocol/openid-connect/token
+        metadataUrl: http://localhost:8080/realms/synera-com-br
+        prompt: auto
+        realm: synera-com-br
+        claims:
+          customClaimName: group
 
-scaffolder:
+scaffolder: {}
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
 catalog:
+  processingInterval: { minutes: 1}
+  # providers:
+  #   keycloakOrg:
+  #     default:
+  #       baseUrl: http://localhost:8080/auth
+  #       loginRealm: synera-com-br
+  #       realm: synera-com-br
+  #       clientId: backstage
+  #       clientSecret: Q3XY5BpykWvKMwhqUdL3txBXIO9ZL8kA
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
   rules:
-    - allow: [Component, System, API, Resource, Location]
+    - allow: [Component, System, API, Resource, Location, Template]
   locations:
-    # Local example data, file locations are relative to the backend process, typically `packages/backend`
     - type: file
-      target: ../../examples/entities.yaml
+      target: ./templates/github.yaml
 
     # Local example template
-    - type: file
-      target: ../../examples/template/template.yaml
-      rules:
-        - allow: [Template]
+    # - type: file
+    #   target: ../../examples/template/template.yaml
+    #   rules:
+    #     - allow: [Template]
 
     # Local example organizational data
-    - type: file
-      target: ../../examples/org.yaml
-      rules:
-        - allow: [User, Group]
+    # - type: file
+    #   target: ../../examples/org.yaml
+    #   rules:
+    #     - allow: [User, Group]
 
     ## Uncomment these lines to add more example data
     # - type: url

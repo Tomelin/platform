@@ -5,6 +5,9 @@ import {
 } from '@backstage/plugin-auth-backend';
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
+import { DEFAULT_NAMESPACE, stringifyEntityRef } from '@backstage/catalog-model';
+import { jwtDecode } from "jwt-decode";
+
 
 export default async function createPlugin(
   env: PluginEnvironment,
@@ -17,38 +20,70 @@ export default async function createPlugin(
     tokenManager: env.tokenManager,
     providerFactories: {
       ...defaultAuthProviderFactories,
+      // auth0: providers.auth0.create({
+      //   signIn: {
+      //     resolver: async (info, ctx) => {
+      //       const { profile: { email } } = info;
+      //       if (!email) {
+      //         throw new Error('User profile contained no email');
+      //       }
 
-      // This replaces the default GitHub auth provider with a customized one.
-      // The `signIn` option enables sign-in for this provider, using the
-      // identity resolution logic that's provided in the `resolver` callback.
-      //
-      // This particular resolver makes all users share a single "guest" identity.
-      // It should only be used for testing and trying out Backstage.
-      //
-      // If you want to use a production ready resolver you can switch to
-      // the one that is commented out below, it looks up a user entity in the
-      // catalog using the GitHub username of the authenticated user.
-      // That resolver requires you to have user entities populated in the catalog,
-      // for example using https://backstage.io/docs/integrations/github/org
-      //
-      // There are other resolvers to choose from, and you can also create
-      // your own, see the auth documentation for more details:
-      //
-      //   https://backstage.io/docs/auth/identity-resolver
-      github: providers.github.create({
+      //       const [name] = email.split('@');
+      //       // const [name] = info.profile.displayName || email.split('@');
+      //       const userRef = stringifyEntityRef({
+      //         kind: 'User',
+      //         name: name,
+      //         namespace: DEFAULT_NAMESPACE,
+      //       });
+
+
+      //       return ctx.issueToken({
+      //         claims: {
+      //           sub: userRef,
+      //           ent: [userRef],
+      //         }
+      //       })
+      //     },
+      //   },
+      // }),
+      keycloak: providers.oidc.create({
         signIn: {
-          resolver(_, ctx) {
-            const userRef = 'user:default/guest'; // Must be a full entity reference
+          resolver(info, ctx){
+            let displayedEmail: string;
+
+            if (info.result.userinfo.email){
+              displayedEmail = info.result.userinfo.email;
+            }else{
+              displayedEmail = info.result.userinfo.sub;
+            }
+
+            const userRef = stringifyEntityRef({
+              kind: 'User',
+              name: displayedEmail,
+              namespace: DEFAULT_NAMESPACE,
+            });
+            
+            const token = info.result.tokenset.access_token || ''
+            const groups = info.result.userinfo?.group
+            env.logger.info(`displayName ${info.profile.displayName}`)
+            env.logger.info(`email ${info.profile.email}`)
+            env.logger.info(`picture ${info.result.userinfo['group']}`)
+            env.logger.info(`picture ${groups['executer']}`)
+            env.logger.info(`picture ${info.result.userinfo?.groups}`)
+            env.logger.info(`tokenset ${info.result.tokenset}`)
+            env.logger.info(`userinfo ${info.result.userinfo}`)
+            env.logger.info(`access_token ${info.result.tokenset.access_token}`)
+
             return ctx.issueToken({
               claims: {
-                sub: userRef, // The user's own identity
-                ent: [userRef], // A list of identities that the user claims ownership through
-              },
-            });
-          },
-          // resolver: providers.github.resolvers.usernameMatchingUserEntityName(),
-        },
-      }),
+                token: info.result.tokenset.access_token || null,
+                sub: userRef,
+                ent: [userRef],
+              }
+            })
+          }
+        }
+      })
     },
   });
 }

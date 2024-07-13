@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myapp
+data:
+  accounts.backstage: apiKey
+  admin.enabled: "true"
+  application.instalceLabelKey: argocd.argoproj.io/instance
+  exec.enabled: "false"
+  oidc.config: |
+    name: keycloak
+    isseuer: http://localhost:8080/realms/synera-com-br
+    clientID: argocd
+    clientSecret: argocd
+    requestedScopes: ['openid', 'profile', 'email']
+    customGroupClaimName: guid
+    requestedIDTokenClaims:
+      groups:
+        essential: true
+  url: https://gitops.domain
+
