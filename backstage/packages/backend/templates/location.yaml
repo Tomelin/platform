@@ -1,10 +1,17 @@
 apiVersion: backstage.io/v1alpha1
 kind: Location
 metadata:
-  name: example-all
-  description: A collection of all Backstage example entities, except users, groups, and templates
+  namespace: default
+  name: platform
 spec:
+  type: file
   targets:
-    - ./github.yaml
-    - ./component.yaml
+    - /Users/rafaeltomelin/devops/backstage/platform/backstage/packages/backend/templates/github.yaml
+    - /Users/rafaeltomelin/devops/backstage/platform/backstage/packages/backend/templates/group.yaml
+    # - ./github.yaml
+    # - ./group.yaml
+    # - ./user.yaml
+    # - ./platform/domain.yaml
+    # - ./platform/system.yaml
+    
     

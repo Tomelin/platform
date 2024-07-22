@@ -22,7 +22,7 @@ import {
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { UserSettingsPage } from '@backstage/plugin-user-settings';
-import { apis, keycloakOIDCAuthApiRef } from './apis';
+import { acmeAuthApiRef, apis, keycloakOIDCAuthApiRef } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
 import { searchPage } from './components/search/SearchPage';
 import { Root } from './components/Root';
@@ -42,8 +42,7 @@ import DarkIcon from '@material-ui/icons/WbSunny';
 import { lightTheme } from './theme/white';
 import { darkTheme } from './theme/dark';
 import { UnifiedThemeProvider } from '@backstage/theme';
-import { EntitySnykContent } from 'backstage-plugin-snyk';
-
+import { githubAuthApiRef } from '@backstage/core-plugin-api';
 
 
 const app = createApp({
@@ -69,48 +68,69 @@ const app = createApp({
     },
   ],
   components: {
-    // SignInPage: props => {
+    SignInPage: props => {
 
-    //   return (
-    //     <>
-    //       <SignInPage
-    //     {...props}
-    //     auto
-    //     provider={{
-    //       id: 'auth0-auth-provider',
-    //       title: 'auth0',
-    //       message: 'Sign In auth0',
-    //       apiRef: acmeAuthApiRef,
-    //     }}
-    //   /> 
-
-    //       <SignInPage
-    //         {...props}
-    //         auto
-    //         provider={{
-    //           id: 'keycloak-auth-provider',
-    //           title: 'keycloak',
-    //           message: 'Sign In keycloak',
-    //           apiRef: acmeAuthApiRef,
-    //         }}
-    //       />
-
-    //     </>
-    //   );
-    // },
-    SignInPage: props => (
-
-      <SignInPage
+      return (
+        <>
+          <SignInPage
         {...props}
         auto
-        provider={{
-          id: 'keycloak-auth-provider',
-          title: 'keycloak',
-          message: 'Sign In keycloak',
-          apiRef: keycloakOIDCAuthApiRef,
-        }}
-      />
-    ),
+        providers={[{
+          id: 'auth0-auth-provider',
+          title: 'auth0',
+          message: 'Sign In auth0',
+          apiRef: acmeAuthApiRef,
+        },
+            {
+          id: 'github-auth-provider',
+          title: 'GitHub',
+          message: 'Sign in using GitHub',
+          apiRef: githubAuthApiRef,
+        }
+      ]}
+        //     {
+    //       id: 'github-auth-provider',
+    //       title: 'GitHub',
+    //       message: 'Sign in using GitHub',
+    //       apiRef: githubAuthApiRef,
+    //     }]
+      /> 
+
+          {/* <SignInPage
+            {...props}
+            auto
+            provider={{
+              id: 'keycloak-auth-provider',
+              title: 'keycloak',
+              message: 'Sign In keycloak',
+              apiRef: acmeAuthApiRef,
+            }}
+          /> */}
+
+        </>
+      );
+    },
+    // SignInPage: props => (
+
+    //   <SignInPage
+    //     {...props}
+    //     auto
+    //     providers={[
+    //     //   {
+    //     //   id: 'keycloak-auth-provider',
+    //     //   title: 'keycloak',
+    //     //   message: 'Sign In keycloak',
+    //     //   apiRef: keycloakOIDCAuthApiRef,
+    //     // },
+    //     {
+    //       id: 'github-auth-provider',
+    //       title: 'GitHub',
+    //       message: 'Sign in using GitHub',
+    //       apiRef: githubAuthApiRef,
+    //     }]}
+    //   />
+      
+    // ),
 
 
   },
@@ -174,7 +194,6 @@ const routes = (
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     {/* <Route path="/dynamic-form" element={<DynamicFormPage />} />
     <Route path="/new-page" element={<NewPage />} /> */}
-    <Route path="/snyk" element={<EntitySnykContent />}/>
 
   </FlatRoutes>
 );

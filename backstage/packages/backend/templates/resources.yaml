@@ -1,0 +1,30 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: database
+  description: Database NoSQL
+spec:
+  type: database
+  owner: group:platform
+  system: developer-portal
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: message-queue
+  description: Message Queue RabbitMQ
+spec:
+  type: mq
+  owner: group:platform
+  system: developer-portal
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: cache
+  description: Redis Cache
+spec:
+  type: cache
+  owner: group:platform
+  system: developer-portal

@@ -1,0 +1,31 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  namespace: default
+  annotations:
+    backstage.io/view-url: https://github.com/Tomelin/desafio-stn/tree/develop/catalog/catalog.info.yaml
+    backstage.io/edit-url: https://github.com/Tomelin/desafio-stn/edit/develop/catalog/catalog.info.yaml
+    backstage.io/source-location: url:https://github.com/Tomelin/desafio-stn/tree/develop/catalog/
+    snyk.io/org-id: 8516c00c-37c2-445e-858e-3a7feb69d38e
+    snyk.io/targets: Tomelin/desafio-stn
+    snyk.io/project-ids: 94807e09-fd98-416c-8971-5e3fbf33aba1
+    sonarqube.org/project-key: 'Tomelin_desafio-stn'
+    github.com/project-slug: 'Tomelin/desafio-stn'
+  name: controller
+  description: Jobs controller
+  tags:
+    - portal
+    - developer
+    - platform
+spec:
+  type: service
+  lifecycle: production
+  owner: group:platform
+  system: developer-portal
+  providesApis:
+    - cloud
+  consumesApis: ['component:process']
+  dependsOn:
+    - 'resource:message-queue'
+    - 'resource:cache'

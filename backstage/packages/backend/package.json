@@ -24,6 +24,7 @@
     "@backstage/config": "^1.2.0",
     "@backstage/plugin-app-backend": "^0.3.70",
     "@backstage/plugin-auth-backend": "^0.22.8",
+    "@backstage/plugin-auth-backend-module-github-provider": "^0.1.19",
     "@backstage/plugin-auth-backend-module-oauth2-provider": "^0.2.2",
     "@backstage/plugin-auth-node": "^0.4.16",
     "@backstage/plugin-catalog-backend": "^1.23.2",
@@ -47,6 +48,7 @@
     "jwt-decode": "^4.0.0",
     "node-gyp": "^9.0.0",
     "pg": "^8.11.3",
+    "react-native-auth0": "^3.2.1",
     "winston": "^3.2.1"
   },
   "devDependencies": {

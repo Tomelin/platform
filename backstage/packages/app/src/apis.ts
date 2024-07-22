@@ -2,6 +2,7 @@ import {
   ScmIntegrationsApi,
   scmIntegrationsApiRef,
   ScmAuth,
+  scmAuthApiRef,
 } from '@backstage/integration-react';
 import {
   AnyApiFactory,
@@ -15,6 +16,7 @@ import {
   createApiFactory,
   createApiRef,
   discoveryApiRef,
+  githubAuthApiRef,
   oauthRequestApiRef,
 } from '@backstage/core-plugin-api';
 import { OAuth2 } from '@backstage/core-app-api';
@@ -25,16 +27,17 @@ OpenIdConnectApi & ProfileInfoApi & BackstageIdentityApi & SessionApi
 > = createApiRef({
   id: 'auth.keycloak',
 });
-// export const acmeAuthApiRef: ApiRef<
-//   OAuthApi &
-//   ProfileInfoApi &
-//   BackstageIdentityApi &
-//   SessionApi
-//   > = createApiRef({
-//   id: 'auth.auth0',
-// });
+export const acmeAuthApiRef: ApiRef<
+  OAuthApi &
+  ProfileInfoApi &
+  BackstageIdentityApi &
+  SessionApi
+  > = createApiRef({
+  id: 'auth.auth0',
+});
 
 export const apis: AnyApiFactory[] = [
+
   createApiFactory({
     api: scmIntegrationsApiRef,
     deps: { configApi: configApiRef },
@@ -47,6 +50,7 @@ export const apis: AnyApiFactory[] = [
       discoveryApi: discoveryApiRef,
       oauthRequestApi: oauthRequestApiRef,
       configApi: configApiRef,
+
     },
     factory: ({discoveryApi, oauthRequestApi, configApi}) =>
       OAuth2.create({
@@ -67,25 +71,47 @@ export const apis: AnyApiFactory[] = [
           },
         },
       }),
+      
   }),
-  // createApiFactory({
-  //   api: acmeAuthApiRef,
-  //   deps: {
-  //     discoveryApi: discoveryApiRef,
-  //     oauthRequestApi: oauthRequestApiRef,
-  //     configApi: configApiRef,
-  //   },
-  //   factory: ({ discoveryApi, oauthRequestApi, configApi }) =>
-  //     OAuth2.create({
-  //       discoveryApi,
-  //       oauthRequestApi,
-  //       provider: {
-  //         id: 'auth0',
-  //         title: 'Auth0',
-  //         icon: () => null,
-  //       },
-  //       defaultScopes: ['openid', 'email', 'profile', 'offline_access'],
-  //       environment: configApi.getOptionalString('auth.environment'),
-  //     }),
-  // })
+
+  createApiFactory({
+    api: githubAuthApiRef,
+    deps: {
+      discoveryApi: discoveryApiRef,
+      oauthRequestApi: oauthRequestApiRef,
+      configApi: configApiRef,
+    },
+    factory: ({ discoveryApi, oauthRequestApi, configApi }) =>
+      OAuth2.create({
+        discoveryApi,
+        oauthRequestApi,
+        provider: {
+          id: 'github',
+          title: 'github',
+          icon: () => null,
+        },
+        defaultScopes: ['openid', 'email', 'profile'],
+        environment: configApi.getOptionalString('auth.environment'),
+      }),
+  })  ,
+  createApiFactory({
+    api: acmeAuthApiRef,
+    deps: {
+      discoveryApi: discoveryApiRef,
+      oauthRequestApi: oauthRequestApiRef,
+      configApi: configApiRef,
+    },
+    factory: ({ discoveryApi, oauthRequestApi, configApi }) =>
+      OAuth2.create({
+        discoveryApi,
+        oauthRequestApi,
+        provider: {
+          id: 'auth0',
+          title: 'Auth0',
+          icon: () => null,
+        },
+        defaultScopes: ['openid', 'email', 'profile', 'offline_access'],
+        environment: configApi.getOptionalString('auth.environment'),
+      }),
+  })
 ];

@@ -31,6 +31,7 @@ import {
 import {
   isGithubActionsAvailable,
   EntityGithubActionsContent,
+  EntityRecentGithubActionsRunsCard,
 } from '@backstage-community/plugin-github-actions';
 import {
   EntityUserProfileCard,
@@ -57,14 +58,7 @@ import {
 
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
-import {
-  SnykOverview,
-  EntitySnykContent,
-  isSnykAvailable,
-} from "backstage-plugin-snyk";
 import { EntitySonarQubeCard } from '@backstage-community/plugin-sonarqube';
-
-
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -118,13 +112,6 @@ const entityWarningContent = (
         </Grid>
       </EntitySwitch.Case>
     </EntitySwitch>
-    {/* <EntitySwitch>
-      <EntitySwitch.Case if={isSnykAvailable}>
-        <Grid item md={3}>
-          <SnykOverview />
-        </Grid>
-      </EntitySwitch.Case>
-    </EntitySwitch> */}
     <EntitySwitch>
       <EntitySwitch.Case if={hasCatalogProcessingErrors}>
         <Grid item xs={12}>
@@ -147,6 +134,9 @@ const overviewContent = (
     <Grid item md={6} xs={12}>
       <EntityCatalogGraphCard variant="gridItem" height={400} />
     </Grid>
+    <Grid item sm={6}>
+      <EntityRecentGithubActionsRunsCard limit={4} variant="gridItem" />
+    </Grid>
     <Grid item md={4} xs={12}>
       <EntityLinksCard />
     </Grid>
@@ -164,10 +154,12 @@ const serviceEntityPage = (
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
     </EntityLayout.Route>
-    <EntityLayout.Route path="/snyk" title="Security">
-      <EntitySnykContent />
-    </EntityLayout.Route>
-
+    {/* <EntityLayout.Route path="/github-actions" title="GitHub Actions">
+      <EntityGithubActionsContent />
+    </EntityLayout.Route> */}
+    {/* <EntityLayout.Route path="/github-actions" title="GitHub Actions">
+      <EntityGithubActionsContent view='cards' />
+    </EntityLayout.Route> */}
     <EntityLayout.Route path="/api" title="API">
       <Grid container spacing={3} alignItems="stretch">
         <Grid item md={6}>

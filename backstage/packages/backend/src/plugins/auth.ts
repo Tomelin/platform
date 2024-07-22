@@ -7,6 +7,7 @@ import { Router } from 'express';
 import { PluginEnvironment } from '../types';
 import { DEFAULT_NAMESPACE, stringifyEntityRef } from '@backstage/catalog-model';
 import { jwtDecode } from "jwt-decode";
+import { profile } from 'winston';
 
 
 export default async function createPlugin(
@@ -20,32 +21,49 @@ export default async function createPlugin(
     tokenManager: env.tokenManager,
     providerFactories: {
       ...defaultAuthProviderFactories,
-      // auth0: providers.auth0.create({
-      //   signIn: {
-      //     resolver: async (info, ctx) => {
-      //       const { profile: { email } } = info;
-      //       if (!email) {
-      //         throw new Error('User profile contained no email');
-      //       }
+      auth0: providers.auth0.create({
+        signIn: {
+          resolver: async (info, ctx) => {
+            const { profile: { email } } = info;
 
-      //       const [name] = email.split('@');
-      //       // const [name] = info.profile.displayName || email.split('@');
-      //       const userRef = stringifyEntityRef({
-      //         kind: 'User',
-      //         name: name,
-      //         namespace: DEFAULT_NAMESPACE,
-      //       });
+            let name: string = '';
+            if (!email) {
+              name = info.result.fullProfile?.nickname;
+            }else{
+              name = email.split('@')[1];
+            }
 
+            // const [name] = email.split('@');
+            // const [name] = info.profile.displayName || email.split('@');
+            const userRef = stringifyEntityRef({
+              kind: 'User',
+              name: name,
+              namespace: DEFAULT_NAMESPACE,
+            });
 
-      //       return ctx.issueToken({
-      //         claims: {
-      //           sub: userRef,
-      //           ent: [userRef],
-      //         }
-      //       })
-      //     },
-      //   },
-      // }),
+            return ctx.issueToken({
+              claims: {
+                sub: userRef,
+                ent: [userRef],
+              }
+            })
+          },
+        },
+      }),
+      github: providers.github.create({
+        signIn: {
+          resolver(_, ctx) {
+            const userRef = 'user:default/guest'; // Must be a full entity reference
+            return ctx.issueToken({
+              claims: {
+                sub: userRef, // The user's own identity
+                ent: [userRef], // A list of identities that the user claims ownership through
+              },
+            });
+          },
+          // resolver: providers.github.resolvers.usernameMatchingUserEntityName(),
+        },
+      }),
       keycloak: providers.oidc.create({
         signIn: {
           resolver(info, ctx){
@@ -84,6 +102,7 @@ export default async function createPlugin(
           }
         }
       })
+
     },
   });
 }

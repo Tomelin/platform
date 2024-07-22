@@ -35,13 +35,7 @@ backend:
 integrations:
   github:
     - host: github.com
-      # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
-      # about setting up the GitHub integration here: https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration
       token: ${GITHUB_TOKEN}
-    ### Example for how to add your GitHub Enterprise instance using the API:
-    # - host: ghe.example.net
-    #   apiBaseUrl: https://ghe.example.net/api/v3
-    #   token: ${GHE_TOKEN}
 
 proxy:
   endpoints:
@@ -83,23 +77,31 @@ auth:
   session:
     secret: backstage
   providers:
-    # auth0:
-    #   development:
-    #     clientId: BMJfomTEGA4Mo3i0hg57qcUBx0WoVsnW
-    #     clientSecret: IrACsVGa46zcEF7lFM-466RnnbGk3UQKHxumLWJPC-FK3hZ59tkXj2eZR2HVA3BS
-    #     domain: tomelin.us.auth0.com
-    #     audience: https://tomelin.us.auth0.com/api/v2/
-    keycloak:
+    auth0:
       development:
-        clientId: backstage
-        clientSecret: Q3XY5BpykWvKMwhqUdL3txBXIO9ZL8kA
-        authorizationUrl: http://localhost:8080/realms/synera-com-br/protocol/openid-connect/auth
-        tokenUrl: http://localhost:8080/realms/synera-com-br/protocol/openid-connect/token
-        metadataUrl: http://localhost:8080/realms/synera-com-br
-        prompt: auto
-        realm: synera-com-br
-        claims:
-          customClaimName: group
+        clientId: ${AUTH0_CLIENT_ID}
+        clientSecret: ${AUTH0_CLIENT_SECRET}
+        domain: tomelin.us.auth0.com
+        audience: https://tomelin.us.auth0.com/api/v2/
+        scope: [profile, email]
+    github:
+      development:
+        clientId: ${GITHUB_CLIENT_ID}
+        clientSecret: ${GITHUB_CLIENT_SECRET}
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
+    # keycloak:
+    #   development:
+    #     clientId: backstage
+    #     clientSecret: Q3XY5BpykWvKMwhqUdL3txBXIO9ZL8kA
+    #     authorizationUrl: http://localhost:8080/realms/synera-com-br/protocol/openid-connect/auth
+    #     tokenUrl: http://localhost:8080/realms/synera-com-br/protocol/openid-connect/token
+    #     metadataUrl: http://localhost:8080/realms/synera-com-br
+    #     prompt: auto
+    #     realm: synera-com-br
+    #     claims:
+    #       customClaimName: group
 
 scaffolder: {}
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
@@ -118,11 +120,30 @@ catalog:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
   rules:
-    - allow: [Component, System, API, Resource, Location, Template]
+    - allow: [Component, System, API, Resource, Location, Template, User, Group, Domain]
   locations:
+    # - type: file
+    #   target: ./templates/github.yaml
+    # - type: file
+    #   target: ./templates/location.yaml
     - type: file
-      target: ./templates/github.yaml
-
+      target: ./templates/components/controller.yaml
+    - type: file
+      target: ./templates/components/process.yaml
+    - type: file
+      target: ./templates/platform/system.yaml
+    - type: file
+      target: ./templates/platform/domain.yaml
+    - type: file
+      target: ./templates/groups/infra.yaml
+    - type: file
+      target: ./templates/groups/org.yaml
+    - type: file
+      target: ./templates/user.yaml
+    - type: file
+      target: ./templates/resources.yaml
+    - type: file
+      target: ./templates/apis.yaml
     # Local example template
     # - type: file
     #   target: ../../examples/template/template.yaml

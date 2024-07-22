@@ -1,0 +1,10 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: tomelin
+spec:
+  profile:
+    displayName: Rafael Tomelin
+    email: tomelin@synera.com.br
+  memberOf: []
