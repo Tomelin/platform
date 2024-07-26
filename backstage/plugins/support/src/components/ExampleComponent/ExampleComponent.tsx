@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Typography, Grid, FormControl, TextField, Button } from '@material-ui/core';
 import {
   InfoCard,
@@ -7,8 +7,6 @@ import {
   Content,
 } from '@backstage/core-components';
 import axios from 'axios';
-import { MailtrapClient } from "mailtrap";
-
 
 export const request = async() =>{
   console.log('teste')
@@ -16,15 +14,15 @@ export const request = async() =>{
 }
 export const ExampleComponent = () => {
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault(); 
     
-    const formData = {
-      name: event.target.elements.username.value,
-      email: event.target.elements.email.value,
-      subject: event.target.elements.subject.value,
-      description: event.target.elements.description.value,
-    };
+    // const formData = {
+    //   name: event.currentTarget.elements.namedItem('name'),
+    //   email: event.currentTarget.elements.namedItem('email'),
+    //   subject: event.currentTarget.elements.namedItem('subject'),
+    //   description: event.currentTarget.elements.namedItem('description'),
+    // };
     let data = JSON.stringify({
       "from": {
         "email": "mailtrap@synera.com.br",

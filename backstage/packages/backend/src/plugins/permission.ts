@@ -8,7 +8,7 @@ import {
   PermissionPolicy,
   PolicyQuery,
 } from '@backstage/plugin-permission-node';
-import { request, Router } from 'express';
+import { Router } from 'express';
 import { PluginEnvironment } from '../types';
 
 class ExamplePermissionPolicy implements PermissionPolicy {

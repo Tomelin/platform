@@ -6,9 +6,6 @@ import {
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
 import { DEFAULT_NAMESPACE, stringifyEntityRef } from '@backstage/catalog-model';
-import { jwtDecode } from "jwt-decode";
-import { profile } from 'winston';
-
 
 export default async function createPlugin(
   env: PluginEnvironment,
@@ -28,8 +25,10 @@ export default async function createPlugin(
 
             let name: string = '';
             if (!email) {
-              name = info.result.fullProfile?.nickname;
-            }else{
+              if ('nickname' in info.result.fullProfile) {
+                name = info.result.fullProfile.nickname as string;
+              }
+            } else {
               name = email.split('@')[1];
             }
 
@@ -66,12 +65,12 @@ export default async function createPlugin(
       }),
       keycloak: providers.oidc.create({
         signIn: {
-          resolver(info, ctx){
+          resolver(info, ctx) {
             let displayedEmail: string;
 
-            if (info.result.userinfo.email){
+            if (info.result.userinfo.email) {
               displayedEmail = info.result.userinfo.email;
-            }else{
+            } else {
               displayedEmail = info.result.userinfo.sub;
             }
 
@@ -80,13 +79,10 @@ export default async function createPlugin(
               name: displayedEmail,
               namespace: DEFAULT_NAMESPACE,
             });
-            
-            const token = info.result.tokenset.access_token || ''
-            const groups = info.result.userinfo?.group
+
             env.logger.info(`displayName ${info.profile.displayName}`)
             env.logger.info(`email ${info.profile.email}`)
             env.logger.info(`picture ${info.result.userinfo['group']}`)
-            env.logger.info(`picture ${groups['executer']}`)
             env.logger.info(`picture ${info.result.userinfo?.groups}`)
             env.logger.info(`tokenset ${info.result.tokenset}`)
             env.logger.info(`userinfo ${info.result.userinfo}`)
