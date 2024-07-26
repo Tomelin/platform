@@ -2,7 +2,7 @@
 FROM node:18-bookworm-slim AS packages
 
 WORKDIR /app
-COPY package.json yarn.lock ./
+COPY package.json  ./
 COPY packages packages
 # COPY plugins plugins
 
