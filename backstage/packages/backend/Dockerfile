@@ -40,18 +40,7 @@ COPY --chown=node:node app-config*.yaml ./
 
 EXPOSE 7007
 
-ENV DockerHub dckr_pat_pgryYLHOGph7I7TopKKzdALgXuM
-ENV GITHUB_TOKEN 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
+COPY  --chown=node:node packages/backend/scripts ./
+RUN chmod +x ./scripts/start.sh
 
-ENV GITHUB_CLIENT_ID a6c12949ac1b192f55b82de27006470b27377c2e
-ENV GITHUB_CLIENT_SECRET 89118d9275498dbe96f5
-
-ENV AUTH0_CLIENT_ID BMJfomTEGA4Mo3i0hg57qcUBx0WoVsnW
-ENV AUTH0_CLIENT_SECRET IrACsVGa46zcEF7lFM-466RnnbGk3UQKHxumLWJPC-FK3hZ59tkXj2eZR2HVA3BS
-ENV BACKEND_SECRET QkFDS0VORF9TRUNSRVQK
-
-ENV PHONE 5551984104084
-ENV SONAR_TOKEN "9b85fdd9bdf9afe7096bd7d757b753904f503895"
-ENV SNYK_TOKEN snyk_cs_vJp_GEXC6G9PlPVYY6ExH8V7akbJ90nnhc9rZscMr5U__v1
-
-CMD ["node", "packages/backend", "--config", "app-config.yaml"]
+CMD ["/app/scripts/start.sh"]
