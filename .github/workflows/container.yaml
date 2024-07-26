@@ -39,7 +39,7 @@ jobs:
     #   run: |
     #     docker push ${{ env.registry_host }}/${{ env.registry_username }}/desafio-stn:${{ steps.container_id.outputs.ID }}
     #   working-directory: ./
-    
+
   otel-export-trace:
     if: always()
     name: OpenTelemetry Export Build Image
