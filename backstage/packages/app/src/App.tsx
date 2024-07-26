@@ -41,7 +41,7 @@ import { lightTheme } from './theme/white';
 import { darkTheme } from './theme/dark';
 import { UnifiedThemeProvider } from '@backstage/theme';
 import { githubAuthApiRef } from '@backstage/core-plugin-api';
-import { SupportPage } from '@internal/backstage-plugin-support';
+// import { SupportPage } from '@internal/backstage-plugin-support';
 
 
 const app = createApp({
@@ -192,7 +192,7 @@ const routes = (
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
 
-<Route path="/support" element={<SupportPage />} />
+    {/* <Route path="/support" element={<SupportPage />} /> */}
   </FlatRoutes>
 );
 
