@@ -33,8 +33,6 @@ import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
-import { DynamicFormPage } from '@internal/plugin-dynamic-form';
-import { NewPage } from '@internal/new-page';
 
 import LightIcon from '@material-ui/icons/WbSunny';
 import DarkIcon from '@material-ui/icons/WbSunny';
@@ -193,8 +191,6 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
-    {/* <Route path="/dynamic-form" element={<DynamicFormPage />} />
-    <Route path="/new-page" element={<NewPage />} /> */}
 
 <Route path="/support" element={<SupportPage />} />
   </FlatRoutes>
