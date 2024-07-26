@@ -40,7 +40,7 @@ COPY --chown=node:node app-config*.yaml ./
 
 EXPOSE 7007
 
-# COPY  --chown=node:node ./packages/backend/scripts ./
+COPY  --chown=node:node ./packages/backend/scripts ./
 # RUN chmod +x /app/scripts/start.sh
 
 CMD ["/app/scripts/start.sh"]
