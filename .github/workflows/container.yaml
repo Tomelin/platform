@@ -53,4 +53,4 @@ jobs:
         otlpEndpoint: grpc://api.honeycomb.io:443/
         otlpHeaders: ${{ secrets.OTLP_HEADERS }}
         githubToken: ${{ secrets.GIT_TOKEN }}
-        otelServiceName: platform-build-image
+        otelServiceName: build-image
