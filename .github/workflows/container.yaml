@@ -12,6 +12,7 @@ env:
   registry_password: ${{ secrets.REGISTRY_PASSWORD }}
   registry_host: ${{ vars.REGISTRY_HOST }}
   container_id: $(date +%s)
+  contaner_name: platform-demo
   
 jobs:
 
@@ -32,13 +33,13 @@ jobs:
 
     - name: Build the container image
       run: |  
-        docker build  -f ./packages/backend/Dockerfile .
+        docker build --tag ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}  -f ./packages/backend/Dockerfile .
       working-directory: ./backstage
 
-    # - name: Publish the image
-    #   run: |
-    #     docker push ${{ env.registry_host }}/${{ env.registry_username }}/desafio-stn:${{ steps.container_id.outputs.ID }}
-    #   working-directory: ./
+    - name: Publish the image
+      run: |
+        docker push ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}
+      working-directory: ./
 
   otel-export-trace:
     if: always()
