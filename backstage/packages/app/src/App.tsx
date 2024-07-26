@@ -43,6 +43,7 @@ import { lightTheme } from './theme/white';
 import { darkTheme } from './theme/dark';
 import { UnifiedThemeProvider } from '@backstage/theme';
 import { githubAuthApiRef } from '@backstage/core-plugin-api';
+import { SupportPage } from '@internal/backstage-plugin-support';
 
 
 const app = createApp({
@@ -77,8 +78,8 @@ const app = createApp({
         auto
         providers={[{
           id: 'auth0-auth-provider',
-          title: 'auth0',
-          message: 'Sign In auth0',
+          title: 'Synera',
+          message: 'Sign in using Google provider',
           apiRef: acmeAuthApiRef,
         },
             {
@@ -195,6 +196,7 @@ const routes = (
     {/* <Route path="/dynamic-form" element={<DynamicFormPage />} />
     <Route path="/new-page" element={<NewPage />} /> */}
 
+<Route path="/support" element={<SupportPage />} />
   </FlatRoutes>
 );
 

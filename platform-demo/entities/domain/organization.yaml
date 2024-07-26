@@ -1,0 +1,8 @@
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: technology
+  description: Area de tecnologia
+spec:
+  type: organization
+  children: [domain:synera2]

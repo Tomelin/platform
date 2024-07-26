@@ -59,6 +59,7 @@ import {
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { EntitySonarQubeCard } from '@backstage-community/plugin-sonarqube';
+import { isSonarQubeAvailable } from '@backstage-community/plugin-sonarqube-react';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -66,6 +67,16 @@ const techdocsContent = (
       <ReportIssue />
     </TechDocsAddons>
   </EntityTechdocsContent>
+);
+
+const cicdCard = (
+  <EntitySwitch>
+    <EntitySwitch.Case if={isGithubActionsAvailable}>
+      <Grid item sm={6}>
+        <EntityRecentGithubActionsRunsCard limit={4} variant="gridItem" />
+      </Grid>
+    </EntitySwitch.Case>
+  </EntitySwitch>
 );
 
 const cicdContent = (
@@ -128,14 +139,19 @@ const overviewContent = (
     <Grid item md={6}>
       <EntityAboutCard variant="gridItem" />
     </Grid>
-    <Grid item md={6}>
-      <EntitySonarQubeCard variant="gridItem" />
-    </Grid>
+      <Grid item md={6}>
+        <EntitySonarQubeCard variant="gridItem" />
+      </Grid>
+    {/* <EntitySwitch.Case if={isGithubActionsAvailable}>
+      <Grid item md={6} xs={12}>
+        <EntityRecentGithubActionsRunsCard limit={4} variant="gridItem" />
+      </Grid>
+    </EntitySwitch.Case> */}
     <Grid item md={6} xs={12}>
       <EntityCatalogGraphCard variant="gridItem" height={400} />
     </Grid>
     <Grid item sm={6}>
-      <EntityRecentGithubActionsRunsCard limit={4} variant="gridItem" />
+    {cicdCard}
     </Grid>
     <Grid item md={4} xs={12}>
       <EntityLinksCard />
@@ -154,12 +170,6 @@ const serviceEntityPage = (
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
     </EntityLayout.Route>
-    {/* <EntityLayout.Route path="/github-actions" title="GitHub Actions">
-      <EntityGithubActionsContent />
-    </EntityLayout.Route> */}
-    {/* <EntityLayout.Route path="/github-actions" title="GitHub Actions">
-      <EntityGithubActionsContent view='cards' />
-    </EntityLayout.Route> */}
     <EntityLayout.Route path="/api" title="API">
       <Grid container spacing={3} alignItems="stretch">
         <Grid item md={6}>

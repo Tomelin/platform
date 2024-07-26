@@ -1,0 +1,8 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  description: A collection of all antities from tenant
+  name: all entities
+spec:
+  targets:
+    - ./domain/all.yaml

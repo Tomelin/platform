@@ -23,6 +23,7 @@ import {
   SidebarSpace,
   useSidebarOpenState,
   Link,
+  HelpIcon,
 } from '@backstage/core-components';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
@@ -74,6 +75,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarScrollWrapper>
           <SidebarItem icon={MapIcon} to="tech-radar" text="Tech Radar" />
         </SidebarScrollWrapper>
+
       </SidebarGroup>
       <SidebarSpace />
       <SidebarDivider />
@@ -82,6 +84,11 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         icon={<UserSettingsSignInAvatar />}
         to="/settings"
       >
+        {/* <SidebarScrollWrapper>
+          <SidebarItem icon={HelpIcon} to="support" text="Suporte" />
+        </SidebarScrollWrapper> */}
+        <SidebarDivider />
+        
         <SidebarSettings />
       </SidebarGroup>
     </Sidebar>

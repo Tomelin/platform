@@ -107,7 +107,7 @@ export const apis: AnyApiFactory[] = [
         oauthRequestApi,
         provider: {
           id: 'auth0',
-          title: 'Synera Authenticator',
+          title: 'Synera',
           icon: () => null,
         },
         defaultScopes: ['openid', 'email', 'profile', 'offline_access'],

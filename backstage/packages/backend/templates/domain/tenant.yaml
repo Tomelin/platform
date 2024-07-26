@@ -2,8 +2,8 @@
 apiVersion: backstage.io/v1alpha1
 kind: Domain
 metadata:
-  name: synera
-  description: Everything related to audio
+  name: synera2
+  description: Everything related to Synera tenant
   links:
     - url: http://example.com/domain/audio/
       title: Domain Readme
@@ -11,4 +11,5 @@ metadata:
       title: Domain Metrics Dashboard
       icon: dashboard
 spec:
+  type: tenant
   owner: guest
