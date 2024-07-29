@@ -15,17 +15,17 @@ RUN find packages \! -name "package.json" -mindepth 2 -maxdepth 2 -exec rm -rf {
 FROM node:18-bookworm-slim AS build
 
 # Install isolate-vm dependencies, these are needed by the @backstage/plugin-scaffolder-backend.
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    apt-get update && \
+# RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+#     --mount=type=cache,target=/var/lib/apt,sharing=locked \
+RUN    apt-get update && \
     apt-get install -y --no-install-recommends python3 g++ build-essential && \
     yarn config set python /usr/bin/python3
 
 # Install sqlite3 dependencies. You can skip this if you don't use sqlite3 in the image,
 # in which case you should also move better-sqlite3 to "devDependencies" in package.json.
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    apt-get update && \
+# RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+#     --mount=type=cache,target=/var/lib/apt,sharing=locked \
+RUN    apt-get update && \
     apt-get install -y --no-install-recommends libsqlite3-dev
 
 USER node
@@ -33,8 +33,8 @@ WORKDIR /app
 
 COPY --from=packages --chown=node:node /app .
 
-RUN --mount=type=cache,target=/home/node/.cache/yarn,sharing=locked,uid=1000,gid=1000 \
-    yarn install --frozen-lockfile --network-timeout 600000
+# RUN --mount=type=cache,target=/home/node/.cache/yarn,sharing=locked,uid=1000,gid=1000 \
+RUN    yarn install --frozen-lockfile --network-timeout 600000
 
 COPY --chown=node:node . .
 
@@ -51,17 +51,17 @@ RUN mkdir packages/backend/dist/skeleton packages/backend/dist/bundle \
 FROM node:18-bookworm-slim
 
 # Install isolate-vm dependencies, these are needed by the @backstage/plugin-scaffolder-backend.
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    apt-get update && \
+# RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+#     --mount=type=cache,target=/var/lib/apt,sharing=locked \
+RUN    apt-get update && \
     apt-get install -y --no-install-recommends python3 g++ build-essential && \
     yarn config set python /usr/bin/python3
 
 # Install sqlite3 dependencies. You can skip this if you don't use sqlite3 in the image,
 # in which case you should also move better-sqlite3 to "devDependencies" in package.json.
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    apt-get update && \
+# RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+#     --mount=type=cache,target=/var/lib/apt,sharing=locked \
+RUN    apt-get update && \
     apt-get install -y --no-install-recommends libsqlite3-dev
 
 # From here on we use the least-privileged `node` user to run the backend.
@@ -77,8 +77,8 @@ WORKDIR /app
 # Copy the install dependencies from the build stage and context
 COPY --from=build --chown=node:node /app/yarn.lock /app/package.json /app/packages/backend/dist/skeleton/ ./
 
-RUN --mount=type=cache,target=/home/node/.cache/yarn,sharing=locked,uid=1000,gid=1000 \
-    yarn install --frozen-lockfile --production --network-timeout 600000
+# RUN --mount=type=cache,target=/home/node/.cache/yarn,sharing=locked,uid=1000,gid=1000 \
+RUN    yarn install --frozen-lockfile --production --network-timeout 600000
 
 # Copy the built packages from the build stage
 COPY --from=build --chown=node:node /app/packages/backend/dist/bundle/ ./
