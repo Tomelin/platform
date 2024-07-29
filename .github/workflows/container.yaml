@@ -42,7 +42,9 @@ jobs:
         node-version: '18.x'
 
     - name: Install yarn
-      run: npm install yarn
+      run: |
+        yarn install --frozen-lockfile
+        npm install yarn
 
     - name: Yarn install
       run: yarn install
