@@ -18,7 +18,7 @@ FROM node:18-bookworm-slim AS build
 # RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 #     --mount=type=cache,target=/var/lib/apt,sharing=locked \
 RUN    apt-get update && \
-    apt-get install -y --no-install-recommends python3 g++ build-essential && \
+    apt-get install -y --no-install-recommends python3 git g++ build-essential && \
     yarn config set python /usr/bin/python3
 
 # Install sqlite3 dependencies. You can skip this if you don't use sqlite3 in the image,
@@ -37,3 +37,5 @@ COPY --from=packages --chown=node:node /app .
 RUN    yarn install --frozen-lockfile --network-timeout 600000
 
 COPY --chown=node:node . .
+
+RUN yarn --cwd packages/backend backstage-cli backend:bundle --build-dependencies
