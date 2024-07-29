@@ -39,7 +39,8 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v6
       with:
-        context: ./backstage/packages/backend
+        file: ./backstage/packages/backend/Dockerfile
+        context: ./backstage
         push: true
         tags: ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}
         # build-args: 
