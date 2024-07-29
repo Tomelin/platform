@@ -45,10 +45,6 @@ jobs:
       run: |
         cd backstage
         yarn install --frozen-lockfile
-        cd packages/backend
-        yarn build:backend --config ../../app-config.yaml
-        cd ../..
-        npm install yarn
 
     # - name: Yarn install
     #   run: yarn install
