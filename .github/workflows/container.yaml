@@ -33,7 +33,8 @@ jobs:
 
     - name: Build the container image
       run: |  
-        docker build --tag ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}  -f ./packages/backend/Dockerfile .
+	echo '$(PWD)'
+        docker build --tag ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}  --build-args='$(pwd)' -f ./packages/backend/Dockerfile .
       working-directory: ./backstage
 
     - name: Publish the image
