@@ -2,9 +2,9 @@
   "extends": "@backstage/cli/config/tsconfig.json",
   "include": [
     "packages/*/src",
-    "plugins/*/src",
-    "plugins/*/dev",
-    "plugins/*/migrations"
+    // "plugins/*/src",
+    // "plugins/*/dev",
+    // "plugins/*/migrations"
   ],
   "exclude": ["node_modules"],
   "compilerOptions": {
