@@ -38,7 +38,7 @@ jobs:
 
     - name: Publish the image
       run: |
-        docker push ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}
+        echo docker push ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}
       working-directory: ./
 
   otel-export-trace:

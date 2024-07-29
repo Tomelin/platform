@@ -38,4 +38,4 @@ RUN    yarn install --frozen-lockfile --network-timeout 600000
 
 COPY --chown=node:node . .
 
-RUN yarn --cwd packages/backend backstage-cli backend:bundle --build-dependencies
+RUN yarn tsc
