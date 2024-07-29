@@ -38,7 +38,8 @@ RUN --mount=type=cache,target=/home/node/.cache/yarn,sharing=locked,uid=1000,gid
 
 COPY --chown=node:node . .
 
-COPY . . 
+RUN pwd
+RUN cat /app/tsconfig.json
 RUN yarn tsc
 RUN yarn --cwd packages/backend build
 # If you have not yet migrated to package roles, use the following command instead:
