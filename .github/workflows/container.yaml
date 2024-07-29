@@ -34,6 +34,7 @@ jobs:
     - name: Build the container image
       run: |
         export  LOCALPATH=`$(pwd)`
+        DOCKER_BUILDKIT=1
         docker build --tag ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}  --build-args LOCALPATH=$LOCALPATH  -f ./packages/backend/Dockerfile .
       working-directory: ./backstage
 
