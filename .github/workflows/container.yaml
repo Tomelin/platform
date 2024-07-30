@@ -57,12 +57,12 @@ jobs:
 
     # - name: Create tagPublish the image
     #   run: |
-    #     docker tag backstage:latest ${{ env.registry_host }}/${{ env.registry_username }}/desafio-stn:${{ steps.container_id.outputs.ID }}
+    #     docker tag backstage:latest ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}
     #   working-directory: ./
 
     # - name: Publish the image
     #   run: |
-    #     docker push ${{ env.registry_host }}/${{ env.registry_username }}/desafio-stn:${{ steps.container_id.outputs.ID }}
+    #     docker push ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}
     #   working-directory: ./
 
     - name: Build and push
