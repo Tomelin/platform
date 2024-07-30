@@ -42,7 +42,7 @@ RUN pwd
 
 RUN cat /app/tsconfig.json
 
-RUN yarn tsc
+# RUN yarn tsc
 RUN yarn --cwd packages/backend build
 # If you have not yet migrated to package roles, use the following command instead:
 # RUN yarn --cwd packages/backend backstage-cli backend:bundle --build-dependencies
