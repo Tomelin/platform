@@ -1,0 +1,163 @@
+app:
+  title: Developer portal
+  baseUrl: http://localhost:7007
+
+  support:
+    url: https://bywhats
+    items:
+      - title: Suport pelo whatsapp
+        icon: chat
+        links:
+          - url: "https://api.whatsapp.com/send?phone=${PHONE}&text=Suporte para o developer Portal"
+            title: Support by whatsapp
+      # - title: Suporte por e-mail
+      #   icon: chat
+      #   links:
+      #     - url: https://whats
+      #       title: Support by whatsapp
+
+organization:
+  name: Synera
+
+permission:
+  enabled: true
+
+backend:
+  # Used for enabling authentication, secret is shared by all backend plugins
+  # See https://backstage.io/docs/auth/service-to-service-auth for
+  # information on the format
+  # auth:
+  #   externalAccess:
+  #     - type: static
+  #       options:
+  #         token: ${BACKEND_SECRET}
+  #         subject: admin-curl-access
+  auth:
+    keys:
+      - secret: ${BACKEND_SECRET}
+  # keys:
+  #   - secret: ${BACKEND_SECRET}
+      
+  baseUrl: http://localhost:7007
+  listen:
+    port: 7007
+    # Uncomment the following host directive to bind to specific interfaces
+    # host: 127.0.0.1
+  csp:
+    connect-src: ["'self'", 'http:', 'https:']
+    # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
+    # Default Helmet Content-Security-Policy values can be removed by setting the key to false
+  cors:
+    origin: http://localhost:7007
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  # This is for local development only, it is not recommended to use this in production
+  # The production database configuration is stored in app-config.production.yaml
+  database:
+    client: better-sqlite3
+    connection: ':memory:'
+  # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
+
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+
+proxy:
+  endpoints:
+    '/snyk':
+      target: https://api.snyk.io/
+      headers:
+        User-Agent: tech-services/backstage-plugin/1.0
+        Authorization: token ${SNYK_TOKEN}
+      pathRewrite:
+        "^/proxy/snyk/": "/"
+    '/sonarqube':
+      target: https://sonarcloud.io/api
+      allowedMethods: ['GET']
+      auth: "${SONAR_TOKEN}:"
+    '/mailtrap':
+      changeOrigin: false
+      secure: false
+      target: https://send.api.mailtrap.io/api/send
+      allowedMethods:
+        - POST
+        - GET
+      headers:
+        Authorization: "Bearer 72d73d3db9cd044d114a47d097001236"
+        Content-Type: "application/json"
+
+  ### Example for how to add a proxy endpoint for the frontend.
+  ### A typical reason to do this is to handle HTTPS and CORS for internal services.
+  # endpoints:
+  #   '/test':
+  #     target: 'https://example.com'
+  #     changeOrigin: true
+sonarqube:
+    baseUrl: https://sonarcloud.io
+    apiKey: ${SONAR_TOKEN}
+# Reference documentation http://backstage.io/docs/features/techdocs/configuration
+# Note: After experimenting with basic setup, use CI/CD to generate docs
+# and an external cloud storage when deploying TechDocs for production use-case.
+# https://backstage.io/docs/features/techdocs/how-to-guides#how-to-migrate-from-techdocs-basic-to-recommended-deployment-approach
+techdocs:
+  builder: 'local'  # Alternatives - 'external'
+  generator:
+    runIn: 'local' # Alternatives - 'local'
+  publisher:
+    type: 'local'   # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
+
+auth:
+  environment: development
+  session:
+    secret: backstage
+  providers:
+    auth0:
+      development:
+        clientId: ${AUTH0_CLIENT_ID}
+        clientSecret: ${AUTH0_CLIENT_SECRET}
+        domain: tomelin.us.auth0.com
+        audience: https://tomelin.us.auth0.com/api/v2/
+        scope: [profile, email]
+    github:
+      development:
+        clientId: ${GITHUB_CLIENT_ID}
+        clientSecret: ${GITHUB_CLIENT_SECRET}
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
+    # keycloak:
+    #   development:
+    #     clientId: backstage
+    #     clientSecret: Q3XY5BpykWvKMwhqUdL3txBXIO9ZL8kA
+    #     authorizationUrl: http://localhost:8080/realms/synera-com-br/protocol/openid-connect/auth
+    #     tokenUrl: http://localhost:8080/realms/synera-com-br/protocol/openid-connect/token
+    #     metadataUrl: http://localhost:8080/realms/synera-com-br
+    #     prompt: auto
+    #     realm: synera-com-br
+    #     claims:
+    #       customClaimName: group
+
+scaffolder: {}
+  # see https://backstage.io/docs/features/software-templates/configuration for software template options
+
+catalog:
+  processingInterval: { minutes: 1}
+  # providers:
+  #   keycloakOrg:
+  #     default:
+  #       baseUrl: http://localhost:8080/auth
+  #       loginRealm: synera-com-br
+  #       realm: synera-com-br
+  #       clientId: backstage
+  #       clientSecret: Q3XY5BpykWvKMwhqUdL3txBXIO9ZL8kA
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  rules:
+    - allow: [Component, System, API, Resource, Location, Template, User, Group, Domain]
+  locations:
+    - type: url
+      target: https://github.com/synera-br/platform-demo/blob/main/entities/all.yaml
+    - type: url
+      target: https://github.com/synera-br/platform-demo/blob/main/entities/apis/handler-kubernetes.yaml
