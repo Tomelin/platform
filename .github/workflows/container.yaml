@@ -41,11 +41,20 @@ jobs:
       with:
         node-version: '18.x'
 
-    - name: Install yarn
+    - name: Install frozen-lockfile
       run: |
         cd backstage
         yarn install --frozen-lockfile
 
+    - name: Install yarn
+      run: |
+          cd backstage
+          yarn install
+
+    - name: Install backend build
+      run: |
+          cd backstage
+          yarn --cwd packages/backend build  
     # - name: Yarn install
     #   run: yarn install
 
