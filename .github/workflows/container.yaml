@@ -42,35 +42,27 @@ jobs:
         node-version: '18.x'
 
     - name: Install frozen-lockfile
-      run: |
-        cd backstage
-        yarn install --frozen-lockfile
-
-    - name: Install yarn
-      run: |
-          cd backstage
-          yarn install
+      run: yarn install --frozen-lockfile
+      working-directory: ./backstage
 
     - name: Install backend build
-      run: |
-          cd backstage
-          yarn --cwd packages/backend build  
-    # - name: Yarn install
-    #   run: yarn install
+      run: yarn --cwd packages/backend build  
+      working-directory: ./backstage
+
 
     - name: Yarn build image
       run: |
         export DOCKER_BUILDKIT=1
-        cd backstage
         yarn build-image
+      working-directory: ./backstage
 
-    - name: Build and push
-      uses: docker/build-push-action@v6
-      with:
-        file: ./backstage/packages/backend/Dockerfile
-        context: ./backstage
-        push: true
-        tags: ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}
+    # - name: Build and push
+    #   uses: docker/build-push-action@v6
+    #   with:
+    #     file: ./backstage/packages/backend/Dockerfile
+    #     context: ./backstage
+    #     push: true
+    #     tags: ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}
         # build-args: 
 
     # - name: Build the container image
