@@ -1,0 +1,1 @@
+"use strict";(()=>{(self.webpackChunkapp=self.webpackChunkapp||[]).push([[7862],{17862:(O,s,E)=>{E.r(s),E.d(s,{LatestWorkflowRunCard:()=>a.i4,LatestWorkflowsForBranchCard:()=>a.IJ,RecentWorkflowRunsCard:()=>a.Oz});var a=E(70897),l=E(2784),n=E(26228),_=E(82717),t=E.n(_)}}]);})();
