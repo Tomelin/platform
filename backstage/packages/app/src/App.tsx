@@ -75,19 +75,25 @@ const app = createApp({
           <SignInPage
         {...props}
         auto
-        providers={[{
+        provider={{
           id: 'auth0-auth-provider',
           title: 'Synera',
           message: 'Sign in using Google provider',
           apiRef: acmeAuthApiRef,
-        },
-            {
-          id: 'github-auth-provider',
-          title: 'GitHub',
-          message: 'Sign in using GitHub',
-          apiRef: githubAuthApiRef,
-        }
-      ]}
+        }}
+      //   providers={[{
+      //     id: 'auth0-auth-provider',
+      //     title: 'Synera',
+      //     message: 'Sign in using Google provider',
+      //     apiRef: acmeAuthApiRef,
+      //   },
+      //       {
+      //     id: 'github-auth-provider',
+      //     title: 'GitHub',
+      //     message: 'Sign in using GitHub',
+      //     apiRef: githubAuthApiRef,
+      //   }
+      // ]}
         //     {
     //       id: 'github-auth-provider',
     //       title: 'GitHub',

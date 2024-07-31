@@ -1,6 +1,6 @@
 app:
   title: Developer portal
-  baseUrl: http://localhost:7007
+  baseUrl: http://platform-demo.synera.com.br
 
   support:
     url: https://bywhats
@@ -38,17 +38,17 @@ backend:
   # keys:
   #   - secret: ${BACKEND_SECRET}
       
-  baseUrl: http://localhost:7007
+  baseUrl: http://platform-demo.synera.com.br
   listen:
     port: 7007
     # Uncomment the following host directive to bind to specific interfaces
-    # host: 127.0.0.1
+    host: 0.0.0.0
   csp:
     connect-src: ["'self'", 'http:', 'https:']
     # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
     # Default Helmet Content-Security-Policy values can be removed by setting the key to false
   cors:
-    origin: http://localhost:7007
+    origin: http://platform-demo.synera.com.br
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
   # This is for local development only, it is not recommended to use this in production
@@ -84,7 +84,7 @@ proxy:
         - POST
         - GET
       headers:
-        Authorization: "Bearer 72d73d3db9cd044d114a47d097001236"
+        Authorization: "Bearer xxxxx"
         Content-Type: "application/json"
 
   ### Example for how to add a proxy endpoint for the frontend.
@@ -159,5 +159,6 @@ catalog:
   locations:
     - type: url
       target: https://github.com/synera-br/platform-demo/blob/main/entities/all.yaml
+
     - type: url
       target: https://github.com/synera-br/platform-demo/blob/main/entities/apis/handler-kubernetes.yaml
