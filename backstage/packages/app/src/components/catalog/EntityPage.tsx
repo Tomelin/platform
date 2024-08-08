@@ -58,7 +58,8 @@ import {
 
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
-import { EntitySonarQubeCard } from '@backstage-community/plugin-sonarqube';
+import { EntitySonarQubeCard  } from '@backstage-community/plugin-sonarqube';
+import { isSonarQubeAvailable } from '@backstage-community/plugin-sonarqube-react';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -76,6 +77,16 @@ const cicdCard = (
       </Grid>
     </EntitySwitch.Case>
   </EntitySwitch>
+);
+
+const sonarQubeCard = (
+  <EntitySwitch>
+  <EntitySwitch.Case if={isSonarQubeAvailable}>
+    <Grid item sm={6}>
+      <EntitySonarQubeCard variant="gridItem" />
+    </Grid>
+  </EntitySwitch.Case>
+</EntitySwitch>
 );
 
 const cicdContent = (
@@ -139,7 +150,7 @@ const overviewContent = (
       <EntityAboutCard variant="gridItem" />
     </Grid>
       <Grid item md={6}>
-        <EntitySonarQubeCard variant="gridItem" />
+        {sonarQubeCard}
       </Grid>
     {/* <EntitySwitch.Case if={isGithubActionsAvailable}>
       <Grid item md={6} xs={12}>

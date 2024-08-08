@@ -32,7 +32,7 @@ import permission from './plugins/permission';
 import { PluginEnvironment } from './types';
 import { ServerPermissionClient } from '@backstage/plugin-permission-node';
 import { DefaultIdentityClient } from '@backstage/plugin-auth-node';
-// import sonarqube from './plugins/sonarqube';
+import sonarqube from './plugins/sonarqube';
 
 function makeCreateEnv(config: Config) {
   const root = getRootLogger();
@@ -88,7 +88,7 @@ async function main() {
   const techdocsEnv = useHotMemoize(module, () => createEnv('techdocs'));
   const searchEnv = useHotMemoize(module, () => createEnv('search'));
   const appEnv = useHotMemoize(module, () => createEnv('app'));
-  // const sonarqubeEnv = useHotMemoize(module, () => createEnv('sonarqube'));
+  const sonarqubeEnv = useHotMemoize(module, () => createEnv('sonarqube'));
   const permissionEnv = useHotMemoize(module, () => createEnv('permission'));
 
   const apiRouter = Router();
@@ -98,7 +98,7 @@ async function main() {
   apiRouter.use('/techdocs', await techdocs(techdocsEnv));
   apiRouter.use('/proxy', await proxy(proxyEnv));
   apiRouter.use('/search', await search(searchEnv));
-  // apiRouter.use('/sonarqube', await sonarqube(sonarqubeEnv));
+  apiRouter.use('/sonarqube', await sonarqube(sonarqubeEnv));
   apiRouter.use('/permission', await permission(permissionEnv));
 
   apiRouter.use(notFoundHandler());
