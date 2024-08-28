@@ -80,9 +80,7 @@ proxy:
       allowedMethods:
         - POST
         - GET
-      headers:
-        Authorization: "Bearer 72d73d3db9cd044d114a47d097001236"
-        Content-Type: "application/json"
+
 
   ### Example for how to add a proxy endpoint for the frontend.
   ### A typical reason to do this is to handle HTTPS and CORS for internal services.
@@ -123,6 +121,8 @@ auth:
         signIn:
           resolvers:
             - resolver: usernameMatchingUserEntityName
+            - resolver: emailMatchingUserEntityProfileEmail
+            - resolver: emailLocalPartMatchingUserEntityName
     # keycloak:
     #   development:
     #     clientId: backstage
