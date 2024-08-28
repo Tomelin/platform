@@ -7,7 +7,6 @@ COPY package.json yarn.lock ./
 COPY packages packages
 COPY samples /app/plugins
 
-
 # Comment this out if you don't have any internal plugins
 #COPY plugins plugins
 
