@@ -22,26 +22,25 @@ export default async function createPlugin(
         signIn: {
           resolver: async (info, ctx) => {
             const { profile: { email } } = info;
+            const { profile: { displayName } } = info;
+            const { profile: { picture } } = info;
 
-            let name: string = '';
-            if (!email) {
-              if ('nickname' in info.result.fullProfile) {
-                name = info.result.fullProfile.nickname as string;
-              }
-            } else {
-              name = email.split('@')[1];
-            }
-
-            // const [name] = email.split('@');
-            // const [name] = info.profile.displayName || email.split('@');
             const userRef = stringifyEntityRef({
               kind: 'User',
-              name: name,
+              name: displayName || "guest",
               namespace: DEFAULT_NAMESPACE,
+              spec: {
+                profile:{
+                  displayName: displayName,
+                  email: email,
+                  picture: picture,
+              }
+              }
             });
 
             return ctx.issueToken({
               claims: {
+                accessToken: info.result.accessToken,
                 sub: userRef,
                 ent: [userRef],
               }
@@ -76,7 +75,7 @@ export default async function createPlugin(
 
             const userRef = stringifyEntityRef({
               kind: 'User',
-              name: displayedEmail,
+              name: "displayedEmail",
               namespace: DEFAULT_NAMESPACE,
             });
 

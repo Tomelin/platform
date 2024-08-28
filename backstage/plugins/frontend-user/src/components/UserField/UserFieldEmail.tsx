@@ -15,30 +15,12 @@ export const UserFieldEmail = ({
     uiSchema?.['ui:label'] || 'Email of user logged in backstage';
   const identityApi = useApi(identityApiRef);
 
-  const { value: getUserEntity } = useAsync(async () => {
-    const profile = await identityApi.getBackstageIdentity();
+const {value: getUserEntity} = useAsync(async () =>{
+  return await identityApi.getProfileInfo();
+})
 
-    if (!profile.userEntityRef?.length) {
-      return 'guest';
-    } else {
-      let user = profile.userEntityRef.split('/');
-      if (user.length > 1) {
-        return user[1];
-      } else {
-        return user;
-      }
-    }
-  }, []);
+const userEmail = getUserEntity?.email?.toString().toLowerCase() || 'guest@domain.com';
 
-  
-  const [userInfo, setUserInfo] = useState<string>('');
-  
-  useEffect(() => {
-    if (getUserEntity !== undefined) {
-      setUserInfo(getUserEntity.toString());
-      onChange(getUserEntity.toString());
-    }
-  }, [getUserEntity, onChange]);
 
   return (
     <FormControl
@@ -50,7 +32,7 @@ export const UserFieldEmail = ({
       <TextField
         required={required}
         variant="outlined"
-        value={userInfo}
+        value={userEmail}
         label={fieldLabel}
         style={{ width: '32rem' }}
         InputLabelProps={{ shrink: true }}

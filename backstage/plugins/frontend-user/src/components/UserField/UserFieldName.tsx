@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FieldProps } from '@rjsf/utils';
-import {
-  FormControl,
-  TextField,
-} from '@material-ui/core';
+import { FormControl, TextField } from '@material-ui/core';
 import { identityApiRef, useApi } from '@backstage/core-plugin-api';
 import useAsync from 'react-use/lib/useAsync';
 
@@ -14,31 +11,15 @@ export const UserFieldName = ({
   formData,
   uiSchema,
 }: FieldProps<string>) => {
-  const fieldLabel = uiSchema?.['ui:label'] || 'Name of logged in backstage';
-
+  const fieldLabel =
+    uiSchema?.['ui:label'] || 'Email of user logged in backstage';
   const identityApi = useApi(identityApiRef);
 
-  const { value: getUserEntity } = useAsync(async () => {
-    const profile = await identityApi.getBackstageIdentity();
+const {value: getUserEntity} = useAsync(async () =>{
+  return await identityApi.getProfileInfo();
+})
 
-    
-    if (profile.userEntityRef?.length > 1) {
-      const tmpUser = profile.userEntityRef.toLowerCase().split('/');
-      const user = tmpUser[1].split('@');
-      return user[0];
-    } else {
-      return 'guest';
-    }
-  }, []);
-
-  const [userInfo, setUserInfo] = useState<string>('');
-
-  useEffect(() => {
-    if (getUserEntity !== undefined) {
-      setUserInfo(getUserEntity.toString());
-      onChange(getUserEntity.toString());
-    }
-  }, [getUserEntity, onChange]);
+const userEmail = getUserEntity?.displayName?.toString() || 'guest';
 
   return (
     <FormControl
@@ -50,13 +31,14 @@ export const UserFieldName = ({
       <TextField
         required={required}
         variant="outlined"
-        value={userInfo}
+        value={userEmail}
         label={fieldLabel}
+        style={{ width: '32rem' }}
         InputLabelProps={{ shrink: true }}
         type="string"
-        style={{ width: '32rem' }}
         InputProps={{
           readOnly: true,
+          id: 'user-logged-by-email'
         }}
       />
     </FormControl>
