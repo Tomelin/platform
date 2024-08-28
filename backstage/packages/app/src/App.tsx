@@ -44,7 +44,7 @@ import { darkTheme } from './theme/dark';
 import { UnifiedThemeProvider } from '@backstage/theme';
 import { githubAuthApiRef } from '@backstage/core-plugin-api';
 // import { SupportPage } from '@internal/backstage-plugin-support';
-import { UserFieldEmailPlugin, UserFieldNamePlugin } from '@internal/backstage-plugin-frontend-user';
+// import { UserFieldEmailPlugin, UserFieldNamePlugin } from '@internal/backstage-plugin-frontend-user';
 
 
 const app = createApp({
@@ -183,8 +183,8 @@ const routes = (
     </Route>
     <Route path="/create" element={<ScaffolderPage />} >
     <ScaffolderFieldExtensions>
-    <UserFieldEmailPlugin />
-    <UserFieldNamePlugin />
+    {/* <UserFieldEmailPlugin />
+    <UserFieldNamePlugin /> */}
     </ScaffolderFieldExtensions>
     </Route>
     <Route path="/api-docs" element={<ApiExplorerPage />} />
