@@ -1,1 +1,1 @@
-export { frontendUserPlugin, FrontendUserPage } from './plugin';
+export {  UserFieldEmailPlugin, UserFieldNamePlugin } from './plugin';
