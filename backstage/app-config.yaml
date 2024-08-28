@@ -114,10 +114,13 @@ auth:
         domain: tomelin.us.auth0.com
         audience: https://tomelin.us.auth0.com/api/v2/
         scope: [profile, email]
-    # github:
-    #   development:
-    #     clientId: ${GITHUB_CLIENT_ID}
-    #     clientSecret: ${GITHUB_CLIENT_SECRET}
+    github:
+      development:
+        clientId: ${GITHUB_CLIENT_ID}
+        clientSecret: ${GITHUB_CLIENT_SECRET}
+        signIn:
+          resolvers:
+          - resolver: usernameMatchingUserEntityName
     # keycloak:
     #   development:
     #     clientId: backstage
