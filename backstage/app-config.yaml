@@ -118,11 +118,11 @@ auth:
       development:
         clientId: ${GITHUB_CLIENT_ID}
         clientSecret: ${GITHUB_CLIENT_SECRET}
-        signIn:
-          resolvers:
-            - resolver: usernameMatchingUserEntityName
-            - resolver: emailMatchingUserEntityProfileEmail
-            - resolver: emailLocalPartMatchingUserEntityName
+        # signIn:
+        #   resolvers:
+        #     - resolver: usernameMatchingUserEntityName
+        #     - resolver: emailMatchingUserEntityProfileEmail
+        #     - resolver: emailLocalPartMatchingUserEntityName
     # keycloak:
     #   development:
     #     clientId: backstage
