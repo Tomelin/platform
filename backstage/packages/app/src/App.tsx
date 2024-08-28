@@ -27,6 +27,7 @@ import { acmeAuthApiRef, apis } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
 import { searchPage } from './components/search/SearchPage';
 import { Root } from './components/Root';
+import { ScaffolderFieldExtensions } from '@backstage/plugin-scaffolder';
 
 import { AlertDisplay, OAuthRequestDialog, SignInPage } from '@backstage/core-components';
 import { createApp } from '@backstage/app-defaults';
@@ -43,6 +44,7 @@ import { darkTheme } from './theme/dark';
 import { UnifiedThemeProvider } from '@backstage/theme';
 import { githubAuthApiRef } from '@backstage/core-plugin-api';
 // import { SupportPage } from '@internal/backstage-plugin-support';
+import { UserFieldEmailPlugin, UserFieldNamePlugin } from '@internal/backstage-plugin-frontend-user';
 
 
 const app = createApp({
@@ -179,7 +181,12 @@ const routes = (
         <ReportIssue />
       </TechDocsAddons>
     </Route>
-    <Route path="/create" element={<ScaffolderPage />} />
+    <Route path="/create" element={<ScaffolderPage />} >
+    <ScaffolderFieldExtensions>
+    <UserFieldEmailPlugin />
+    <UserFieldNamePlugin />
+    </ScaffolderFieldExtensions>
+    </Route>
     <Route path="/api-docs" element={<ApiExplorerPage />} />
     <Route
       path="/tech-radar"
