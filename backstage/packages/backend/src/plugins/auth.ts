@@ -48,55 +48,55 @@ export default async function createPlugin(
           },
         },
       }),
-      github: providers.github.create({
-        signIn: {
-          resolver(_, ctx) {
-            const userRef = 'user:default/guest'; // Must be a full entity reference
-            return ctx.issueToken({
-              claims: {
-                sub: userRef, // The user's own identity
-                ent: [userRef], // A list of identities that the user claims ownership through
-              },
-            });
-          },
-          // resolver: providers.github.resolvers.usernameMatchingUserEntityName(),
-        },
-      }),
-      keycloak: providers.oidc.create({
-        signIn: {
-          resolver(info, ctx) {
-            let displayedEmail: string;
+      // github: providers.github.create({
+      //   signIn: {
+      //     resolver(_, ctx) {
+      //       const userRef = 'user:default/guest'; // Must be a full entity reference
+      //       return ctx.issueToken({
+      //         claims: {
+      //           sub: userRef, // The user's own identity
+      //           ent: [userRef], // A list of identities that the user claims ownership through
+      //         },
+      //       });
+      //     },
+      //     // resolver: providers.github.resolvers.usernameMatchingUserEntityName(),
+      //   },
+      // }),
+      // keycloak: providers.oidc.create({
+      //   signIn: {
+      //     resolver(info, ctx) {
+      //       let displayedEmail: string;
 
-            if (info.result.userinfo.email) {
-              displayedEmail = info.result.userinfo.email;
-            } else {
-              displayedEmail = info.result.userinfo.sub;
-            }
+      //       if (info.result.userinfo.email) {
+      //         displayedEmail = info.result.userinfo.email;
+      //       } else {
+      //         displayedEmail = info.result.userinfo.sub;
+      //       }
 
-            const userRef = stringifyEntityRef({
-              kind: 'User',
-              name: "displayedEmail",
-              namespace: DEFAULT_NAMESPACE,
-            });
+      //       const userRef = stringifyEntityRef({
+      //         kind: 'User',
+      //         name: "displayedEmail",
+      //         namespace: DEFAULT_NAMESPACE,
+      //       });
 
-            env.logger.info(`displayName ${info.profile.displayName}`)
-            env.logger.info(`email ${info.profile.email}`)
-            env.logger.info(`picture ${info.result.userinfo['group']}`)
-            env.logger.info(`picture ${info.result.userinfo?.groups}`)
-            env.logger.info(`tokenset ${info.result.tokenset}`)
-            env.logger.info(`userinfo ${info.result.userinfo}`)
-            env.logger.info(`access_token ${info.result.tokenset.access_token}`)
+      //       env.logger.info(`displayName ${info.profile.displayName}`)
+      //       env.logger.info(`email ${info.profile.email}`)
+      //       env.logger.info(`picture ${info.result.userinfo['group']}`)
+      //       env.logger.info(`picture ${info.result.userinfo?.groups}`)
+      //       env.logger.info(`tokenset ${info.result.tokenset}`)
+      //       env.logger.info(`userinfo ${info.result.userinfo}`)
+      //       env.logger.info(`access_token ${info.result.tokenset.access_token}`)
 
-            return ctx.issueToken({
-              claims: {
-                token: info.result.tokenset.access_token || null,
-                sub: userRef,
-                ent: [userRef],
-              }
-            })
-          }
-        }
-      })
+      //       return ctx.issueToken({
+      //         claims: {
+      //           token: info.result.tokenset.access_token || null,
+      //           sub: userRef,
+      //           ent: [userRef],
+      //         }
+      //       })
+      //     }
+      //   }
+      // })
 
     },
   });

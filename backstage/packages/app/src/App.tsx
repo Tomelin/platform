@@ -42,7 +42,6 @@ import DarkIcon from '@material-ui/icons/WbSunny';
 import { lightTheme } from './theme/white';
 import { darkTheme } from './theme/dark';
 import { UnifiedThemeProvider } from '@backstage/theme';
-import { githubAuthApiRef } from '@backstage/core-plugin-api';
 import { UserFieldEmailPlugin, UserFieldNamePlugin } from '@internal/backstage-plugin-frontend-user';
 // import { SupportPage } from '@internal/backstage-plugin-support';
 

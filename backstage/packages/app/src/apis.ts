@@ -43,56 +43,57 @@ export const apis: AnyApiFactory[] = [
     factory: ({ configApi }) => ScmIntegrationsApi.fromConfig(configApi),
   }),
   ScmAuth.createDefaultApiFactory(),
-  createApiFactory({
-    api: keycloakOIDCAuthApiRef,
-    deps: {
-      discoveryApi: discoveryApiRef,
-      oauthRequestApi: oauthRequestApiRef,
-      configApi: configApiRef,
+  // createApiFactory({
+  //   api: keycloakOIDCAuthApiRef,
+  //   deps: {
+  //     discoveryApi: discoveryApiRef,
+  //     oauthRequestApi: oauthRequestApiRef,
+  //     configApi: configApiRef,
 
-    },
-    factory: ({discoveryApi, oauthRequestApi, configApi}) =>
-      OAuth2.create({
-        discoveryApi,
-        oauthRequestApi,
-        provider: {
-          id: 'keycloak',
-          title: 'Keycloak provider',
-          icon: () => null,
-        },
-        environment: configApi.getOptionalString('auth.environment'),
-        defaultScopes: ['openid', 'profile', 'email'],
-        popupOptions: {
-          size: {
-            height: 250,
-            width: 250,
+  //   },
+  //   factory: ({discoveryApi, oauthRequestApi, configApi}) =>
+  //     OAuth2.create({
+  //       discoveryApi,
+  //       oauthRequestApi,
+  //       provider: {
+  //         id: 'keycloak',
+  //         title: 'Keycloak provider',
+  //         icon: () => null,
+  //       },
+  //       environment: configApi.getOptionalString('auth.environment'),
+  //       defaultScopes: ['openid', 'profile', 'email'],
+  //       popupOptions: {
+  //         size: {
+  //           height: 250,
+  //           width: 250,
 
-          },
-        },
-      }),
+  //         },
+  //       },
+  //     }),
       
-  }),
+  // }),
 
-  createApiFactory({
-    api: githubAuthApiRef,
-    deps: {
-      discoveryApi: discoveryApiRef,
-      oauthRequestApi: oauthRequestApiRef,
-      configApi: configApiRef,
-    },
-    factory: ({ discoveryApi, oauthRequestApi, configApi }) =>
-      OAuth2.create({
-        discoveryApi,
-        oauthRequestApi,
-        provider: {
-          id: 'github',
-          title: 'github',
-          icon: () => null,
-        },
-        defaultScopes: ['openid', 'email', 'profile'],
-        environment: configApi.getOptionalString('auth.environment'),
-      }),
-  })  ,
+  // createApiFactory({
+  //   api: githubAuthApiRef,
+  //   deps: {
+  //     discoveryApi: discoveryApiRef,
+  //     oauthRequestApi: oauthRequestApiRef,
+  //     configApi: configApiRef,
+  //   },
+  //   factory: ({ discoveryApi, oauthRequestApi, configApi }) =>
+  //     OAuth2.create({
+  //       discoveryApi,
+  //       oauthRequestApi,
+  //       provider: {
+  //         id: 'github',
+  //         title: 'github',
+  //         icon: () => null,
+  //       },
+  //       defaultScopes: ['openid', 'email', 'profile'],
+  //       environment: configApi.getOptionalString('auth.environment'),
+  //     }),
+  // }),
+
   createApiFactory({
     api: acmeAuthApiRef,
     deps: {
