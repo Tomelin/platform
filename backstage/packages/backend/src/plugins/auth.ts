@@ -50,8 +50,9 @@ export default async function createPlugin(
       }),
       github: providers.github.create({
         signIn: {
-          resolver(_, ctx) {
-            const userRef = 'user:default/guest'; // Must be a full entity reference
+          resolver: async (info, ctx) => {
+            const { profile: { displayName } } = info;
+            const userRef = `user:default/${displayName}`; // Must be a full entity reference
             return ctx.issueToken({
               claims: {
                 sub: userRef, // The user's own identity
