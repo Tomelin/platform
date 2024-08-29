@@ -48,21 +48,21 @@ export default async function createPlugin(
           },
         },
       }),
-      github: providers.github.create({
-        signIn: {
-          resolver: async (info, ctx) => {
-            const { profile: { displayName } } = info;
-            const userRef = `user:default/${displayName}`; // Must be a full entity reference
-            return ctx.issueToken({
-              claims: {
-                sub: userRef, // The user's own identity
-                ent: [userRef], // A list of identities that the user claims ownership through
-              },
-            });
-          },
-          // resolver: providers.github.resolvers.usernameMatchingUserEntityName(),
-        },
-      }),
+      // github: providers.github.create({
+      //   signIn: {
+      //     resolver: async (info, ctx) => {
+      //       const { profile: { displayName } } = info;
+      //       const userRef = `user:default/${displayName}`; // Must be a full entity reference
+      //       return ctx.issueToken({
+      //         claims: {
+      //           sub: userRef, // The user's own identity
+      //           ent: [userRef], // A list of identities that the user claims ownership through
+      //         },
+      //       });
+      //     },
+      //     // resolver: providers.github.resolvers.usernameMatchingUserEntityName(),
+      //   },
+      // }),
       // keycloak: providers.oidc.create({
       //   signIn: {
       //     resolver(info, ctx) {
