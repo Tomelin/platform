@@ -86,16 +86,16 @@ jobs:
     #     echo docker push ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}
     #   working-directory: ./
 
-  otel-export-trace:
-    if: always()
-    name: OpenTelemetry Export Build Image
-    runs-on: ubuntu-latest
-    needs: [build]
-    steps:
-    - name: Export Workflow Trace
-      uses: inception-health/otel-export-trace-action@latest
-      with:
-        otlpEndpoint: grpc://api.honeycomb.io:443/
-        otlpHeaders: ${{ secrets.OTLP_HEADERS }}
-        githubToken: ${{ secrets.GIT_TOKEN }}
-        otelServiceName: build-image
+#  otel-export-trace:
+#    if: always()
+#    name: OpenTelemetry Export Build Image
+#    runs-on: ubuntu-latest
+#    needs: [build]
+#    steps:
+#    - name: Export Workflow Trace
+#      uses: inception-health/otel-export-trace-action@latest
+#      with:
+#        otlpEndpoint: grpc://api.honeycomb.io:443/
+#        otlpHeaders: ${{ secrets.OTLP_HEADERS }}
+#        githubToken: ${{ secrets.GIT_TOKEN }}
+#        otelServiceName: build-image
