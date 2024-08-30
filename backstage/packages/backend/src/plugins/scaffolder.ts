@@ -22,7 +22,7 @@ export default async function createPlugin(
 
   const actions = [
     ...builtInActions,
-    createAzureKeyVaultAction(env.config, env.logger),
+    createAzureKeyVaultAction(env.config),
   ];
 
   return await createRouter({

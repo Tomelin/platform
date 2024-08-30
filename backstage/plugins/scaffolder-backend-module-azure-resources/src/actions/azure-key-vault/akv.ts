@@ -24,7 +24,7 @@ interface DataConfig {
  *
  * @public
  */
-export function createAzureKeyVaultAction(config: Config, logger: Logger) {
+export function createAzureKeyVaultAction(config: Config) {
   // For more information on how to define custom actions, see
   //   https://backstage.io/docs/features/software-templates/writing-custom-actions
   return createTemplateAction<{
