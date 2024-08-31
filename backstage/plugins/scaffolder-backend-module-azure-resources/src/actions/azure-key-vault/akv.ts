@@ -70,8 +70,25 @@ export function createAzureKeyVaultAction(config: Config) {
         );  
       }
       
-      const result = config.getOptionalConfigArray('azure.credentials')
-      const credentials: AzureCredentials = result[0]['data']
+      const result = config.getOptionalConfigArray('azure.credentials') ?? []
+
+      const keyValuePairs = result.map(item => {
+        console.log(item)
+        console.log(typeof item)
+        ctx.logger.info(item)
+        ctx.logger.info(typeof item)
+        ctx.logger.info(Object.entries(item))
+       return  Object.entries(item)
+  });
+      ctx.logger.info(keyValuePairs);
+      ctx.logger.info(JSON.stringify( result))
+      ctx.logger.info(JSON.stringify(result[0]))
+      ctx.logger.info(result.length)
+      if (result.length === 0){
+        throw new Error("Not found secrets")
+
+      }
+      let credentials: AzureCredentials =  result[0]['data']
       
       
       // ################ STARTS VALIDATIONS ################  
