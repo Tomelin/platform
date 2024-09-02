@@ -84,9 +84,10 @@ export function createAzureKeyVaultAction(config: Config) {
       ctx.logger.info(JSON.stringify( result))
       ctx.logger.info(JSON.stringify(result[0]))
       ctx.logger.info(result.length)
-      if (result.length === 0){
+      if (result.length !== 0){
+        ctx.logger.info(`${result.length} secrets found`)
+      }else{
         throw new Error("Not found secrets")
-
       }
       let credentials: AzureCredentials =  result[0]['data']
       

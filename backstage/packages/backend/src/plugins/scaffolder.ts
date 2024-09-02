@@ -33,6 +33,6 @@ export default async function createPlugin(
     reader: env.reader,
     catalogClient,
     identity: env.identity,
-    permissions: env.permissions,
+    // permissions: env.permissions,
   });
 }

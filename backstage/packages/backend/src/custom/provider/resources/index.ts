@@ -1,0 +1,1 @@
+export { GitHubOrgProvider } from './resources';

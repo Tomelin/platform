@@ -3,11 +3,17 @@ import { ScaffolderEntitiesProcessor } from '@backstage/plugin-catalog-backend-m
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
 import { KeycloakOrgEntityProvider } from '@janus-idp/backstage-plugin-keycloak-backend';
+// import { CollectorEntities } from '../../../../plugins/catalog-backend-module-users/src';
+import { CollectorEntities } from '@internal/plugin-catalog-backend-module-users';
 
 export default async function createPlugin(
   env: PluginEnvironment,
 ): Promise<Router> {
   const builder = await CatalogBuilder.create(env);
+
+  const { scheduler, config } = env;
+  const myProvider = new CollectorEntities(config,scheduler);
+  builder.addEntityProvider(myProvider);
   builder.addProcessor(new ScaffolderEntitiesProcessor());
   builder.addEntityProvider(
     KeycloakOrgEntityProvider.fromConfig(env.config, {

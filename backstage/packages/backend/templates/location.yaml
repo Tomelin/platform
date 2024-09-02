@@ -6,8 +6,9 @@ metadata:
 spec:
   type: file
   targets:
-    - /Users/rafaeltomelin/devops/backstage/platform/backstage/packages/backend/templates/github.yaml
-    - /Users/rafaeltomelin/devops/backstage/platform/backstage/packages/backend/templates/group.yaml
+    - ./azure_key_vault.yaml
+    # - /Users/rafaeltomelin/devops/backstage/platform/backstage/packages/backend/templates/github.yaml
+    # - /Users/rafaeltomelin/devops/backstage/platform/backstage/packages/backend/templates/group.yaml
     # - ./github.yaml
     # - ./group.yaml
     # - ./user.yaml

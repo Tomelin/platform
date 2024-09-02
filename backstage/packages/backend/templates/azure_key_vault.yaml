@@ -1,0 +1,34 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: docs-template
+  title: Documentation Template
+  description: Create a new standalone documentation project
+  tags:
+    - recommended
+    - techdocs
+    - mkdocs
+spec:
+  owner: backstage/techdocs-core
+  type: documentation
+  parameters:
+    - title: Fill in some steps
+      required:
+        - name
+        - description
+      properties:
+        name:
+          title: Name
+          type: string
+          description: Unique name of the component
+          ui:field: EntityNamePicker
+          ui:autofocus: true
+
+  steps:
+    - id: fetch
+      name: Template Docs Skeleton
+      action: azure:keyvault
+
+
+  output:
+    links: {}

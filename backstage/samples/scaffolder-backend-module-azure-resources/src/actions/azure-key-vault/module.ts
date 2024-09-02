@@ -1,20 +1,23 @@
-import { createBackendModule } from "@backstage/backend-plugin-api";
+import { createBackendModule, coreServices } from "@backstage/backend-plugin-api";
 import { scaffolderActionsExtensionPoint  } from '@backstage/plugin-scaffolder-node/alpha';
-import { createAcmeExampleAction } from "./akv";
+import { createAzureKeyVaultAction } from "./akv";
+import { Logger } from 'winston'; 
+import { Config } from '@backstage/config';
 
 /**
  * A backend module that registers the action into the scaffolder
  */
 export const scaffolderModule = createBackendModule({
-  moduleId: 'acme:example',
+  moduleId: 'azure:keyvault',
   pluginId: 'scaffolder',
   register({ registerInit }) {
     registerInit({
       deps: {
-        scaffolderActions: scaffolderActionsExtensionPoint
+        scaffolderActions: scaffolderActionsExtensionPoint,
+        config: coreServices.rootConfig
       },
-      async init({ scaffolderActions}) {
-        scaffolderActions.addActions(createAcmeExampleAction());
+      async init({ scaffolderActions, config }) {
+        scaffolderActions.addActions(createAzureKeyVaultAction(config));
       }
     });
   },

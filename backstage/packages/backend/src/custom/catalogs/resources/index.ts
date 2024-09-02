@@ -1,0 +1,1 @@
+export { FrobsProvider } from './catalog';
