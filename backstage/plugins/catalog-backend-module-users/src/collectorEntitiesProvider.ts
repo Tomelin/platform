@@ -168,6 +168,8 @@ export class CollectorEntities implements EntityProvider {
         'backstage.io/managed-by-location': `url:ok`,
         'backstage.io/managed-by-origin-location': `url:ok`,
       },
+      temp.apiVersion = "backstage.io/v1alpha1";
+      
         entities.push(temp)
     }
 
