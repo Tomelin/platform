@@ -47,7 +47,7 @@ jobs:
 
     - name: Copy samples director
       run: |
-	rm -rf samples
+        rm -rf samples
         cp -aR plugins samples
       working-directory: ./backstage
 
