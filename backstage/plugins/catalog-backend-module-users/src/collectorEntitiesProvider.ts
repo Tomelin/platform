@@ -169,11 +169,12 @@ export class CollectorEntities implements EntityProvider {
         'backstage.io/managed-by-origin-location': `url:ok`,
       },
       temp.apiVersion = "backstage.io/v1alpha1";
-      
+
+      this.logger.warn(JSON.stringify(temp))
         entities.push(temp)
     }
 
-
+try{
     await this.connection.applyMutation({
       type: 'full',
       entities: entities.map((entity: Entity) => ({
@@ -185,7 +186,11 @@ export class CollectorEntities implements EntityProvider {
     this.logger.info(
       `Refreshed ${this.getProviderName()}: ${entities.length} entities added`,
     );
-
+  }catch{
+    this.logger.error(
+      `Error ${this.getProviderName()}: ${entities.length} for include`,
+    );
+  }
   }
 
   isEntity(obj: any): boolean {

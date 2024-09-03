@@ -45,6 +45,12 @@ jobs:
       run: yarn install --frozen-lockfile
       working-directory: ./backstage
 
+    - name: Copy samples director
+      run: |
+	rm -rf samples
+        cp -aR plugins samples
+      working-directory: ./backstage
+
     - name: Install backend build
       run: yarn --cwd packages/backend build  
       working-directory: ./backstage
