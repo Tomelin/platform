@@ -49,7 +49,6 @@ export class CollectorEntities implements EntityProvider {
     };
   }
 
-
   async run(): Promise<void> {
     if (!this.connection) {
       this.logger.error(`connection undefined to ${this.getProviderName()}`)
@@ -162,11 +161,19 @@ export class CollectorEntities implements EntityProvider {
 
     if (Array.isArray(data)) {
       entities = data as unknown as Entity[]
+      entities.forEach((entity: Entity) => {
+        entity.apiVersion = "backstage.io/v1alpha1";
+        entity.metadata.annotations = {
+          'backstage.io/managed-by-location': `url:ok`,
+          'backstage.io/managed-by-origin-location': `url:ok/${entity.metadata.name}`,
+        };
+      });
+
     } else {
       const temp = data as unknown as Entity
       temp.metadata.annotations = {
         'backstage.io/managed-by-location': `url:ok`,
-        'backstage.io/managed-by-origin-location': `url:ok`,
+        'backstage.io/managed-by-origin-location': `url:ok/${temp.metadata.name}`,
       },
       temp.apiVersion = "backstage.io/v1alpha1";
 
