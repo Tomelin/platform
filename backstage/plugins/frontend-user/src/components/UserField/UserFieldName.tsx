@@ -15,11 +15,36 @@ export const UserFieldName = ({
     uiSchema?.['ui:label'] || 'Email of user logged in backstage';
   const identityApi = useApi(identityApiRef);
 
-const {value: getUserEntity} = useAsync(async () =>{
-  return await identityApi.getProfileInfo();
-})
+  // Fetch the user profile asynchronously
+  const { value: userProfile, error, loading } = useAsync(async () => {
+    try {
+      return await identityApi.getProfileInfo();
+    } catch (err) {
+      console.error('Error fetching user profile:', err);
+      return null;
+    }
+  }, [identityApi]);
 
-const userEmail = getUserEntity?.displayName?.toString() || 'guest';
+  // Determine user email
+  const [userEmail, setUserEmail] = useState('guest');
+  
+  useEffect(() => {
+    if (userProfile?.displayName) {
+      setUserEmail(userProfile.displayName.toString().toLowerCase());
+      onChange(userProfile.displayName.toString().toLowerCase());
+    } 
+  }, [userProfile]);
+
+  // Handle loading and error states
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error fetching user email</div>;
+  }
+
+
 
   return (
     <FormControl
