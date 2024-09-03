@@ -130,11 +130,11 @@ export class CollectorEntities implements EntityProvider {
                 this.channel.ack(msg);
                 return
               } else {
-                this.logger.warn(`Message is not a valid entity`);
+                this.logger.warn(`Message is not a valid entity ${msg.content.toString()}`);
                 this.channel.nack(msg, false, false); // Reject the message, no requeue
               }
             } catch (err) {
-              this.logger.error(`Error processing message: ${err}`);
+              this.logger.error(`Error processing message: ${err} and message is: ${msg.content.toString()}`);
               this.channel.nack(msg, false, false); // Reject the message, no requeue
             }
           } else {
@@ -170,8 +170,10 @@ export class CollectorEntities implements EntityProvider {
       },
       temp.apiVersion = "backstage.io/v1alpha1";
 
-      this.logger.warn(JSON.stringify(temp))
-        entities.push(temp)
+      this.logger.warn('The message is:')
+      this.logger.warn(JSON.stringify(temp));
+
+      entities.push(temp)
     }
 
 try{

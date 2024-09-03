@@ -143,8 +143,21 @@ azure:
       subscription: ${AZURE_SUBSCRIPTION_ID}
       tenant: ${AZURE_TENANT_ID}
   cloud:
-    keyvault: "synera-d-akv-00001"
+    keyvault: ${AZURE_KEYVAULT}
 
+message_queue:
+  rabbitmq:
+    url: ${RMQ_URL}
+    vhost: ${RMQ_VHOST}
+  dead_letter:
+    exchange: ${RMQ_DLX}
+    queue: ${RMQ_DLQ}
+  infra_as_code:
+    exchange: ${RMQ_IAC_EX}
+    queue: ${RMQ_IAC_QUEUE}
+    filter_header: ${RMQ_IAC_FILTER}
+
+  
 catalog:
   processingInterval: { minutes: 1}
   # providers:
