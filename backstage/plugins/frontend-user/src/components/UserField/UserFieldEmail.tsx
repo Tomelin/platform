@@ -15,10 +15,6 @@ export const UserFieldEmail = ({
     uiSchema?.['ui:label'] || 'Email of user logged in backstage';
   const identityApi = useApi(identityApiRef);
 
-const {value: getUserEntity} = useAsync(async () =>{
-  return await identityApi.getProfileInfo();
-})
-
   // Fetch the user profile asynchronously
   const { value: userProfile, error, loading } = useAsync(async () => {
     try {
@@ -35,8 +31,10 @@ const {value: getUserEntity} = useAsync(async () =>{
   useEffect(() => {
     if (userProfile?.email) {
       setUserEmail(userProfile.email.toString().toLowerCase());
+      onChange(userProfile.email.toString().toLowerCase());
     } 
   }, [userProfile]);
+
   // Handle loading and error states
   if (loading) {
     return <div>Loading...</div>;

@@ -80,6 +80,10 @@ jobs:
         tags: ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}
         # build-args: 
 
+    - name: Url image
+      run: |
+        echo ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}
+
     # - name: Build the container image
     #   run: |
     #     export  LOCALPATH=`$(pwd)`
