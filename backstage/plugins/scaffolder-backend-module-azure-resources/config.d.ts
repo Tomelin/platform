@@ -4,65 +4,71 @@ export interface Config {
   /**
    * @visibility frontend
    */
-  azure?: {
+  cloud?: {
+    /** Optional configurations for the azure plugin */
     /**
-     * The parameters of credentials.
      * @visibility frontend
      */
-    credentials?: [
-      {
-        /**
-       * The parameters of client_id.
+    azure?: {
+      /**
+       * The parameters of credentials.
        * @visibility frontend
        */
-        client_id?: string;
-        /**
-         * The parameters of client_secret.
+      credentials?: [
+        {
+          /**
+         * The parameters of client_id.
          * @visibility frontend
          */
-        client_secret?: string;
+          client_id?: string;
+          /**
+           * The parameters of client_secret.
+           * @visibility frontend
+           */
+          client_secret?: string;
+          /**
+         * The parameters of subscription.
+         * @visibility frontend
+         */
+          subscription?: string;
+        }
+      ],
+      /**
+     * The parameters of cloud.
+     * @visibility frontend
+     */
+      cloud?: {
         /**
-       * The parameters of subscription.
-       * @visibility frontend
-       */
-        subscription?: string;
-      }
-    ],
-        /**
-       * The parameters of cloud.
-       * @visibility frontend
-       */
-    cloud?: {
-              /**
-       * The parameters of keyvault.
-       * @visibility frontend
-       */
-      keyvault?: {
-                /**
-       * The parameters of vaultName.
-       * @visibility frontend
-       */
-        vaultName?: string;
-      }
-    },
-                    /**
-       * The parameters of cloud2.
-       * @visibility frontend
-       */
-    cloud2?: [
-      {
-                        /**
-       * The parameters of keyvault.
-       * @visibility frontend
-       */
+ * The parameters of keyvault.
+ * @visibility frontend
+ */
         keyvault?: {
-                          /**
-       * The parameters of vaultName.
-       * @visibility frontend
-       */
+          /**
+ * The parameters of vaultName.
+ * @visibility frontend
+ */
           vaultName?: string;
         }
-      }
-    ]
+      },
+      /**
+* The parameters of cloud2.
+* @visibility frontend
+*/
+      cloud2?: [
+        {
+          /**
+* The parameters of keyvault.
+* @visibility frontend
+*/
+          keyvault?: {
+            /**
+* The parameters of vaultName.
+* @visibility frontend
+*/
+            vaultName?: string;
+          }
+        }
+      ]
+    };
   };
 }

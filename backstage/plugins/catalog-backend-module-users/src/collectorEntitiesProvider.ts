@@ -29,7 +29,7 @@ export class CollectorEntities implements EntityProvider {
     const schedule = configuration
       ? readTaskScheduleDefinitionFromConfig(configuration)
       : // Default if there is no config
-      { timeout: { seconds: 4 }, frequency: { minutes: 10 } };
+      { timeout: { seconds: 4 }, frequency: { minutes: 60 } };
     const taskRunner = this.scheduler.createScheduledTaskRunner(schedule);
     this.scheduleFn = this.createScheduleFn(taskRunner);
   }
@@ -61,6 +61,11 @@ export class CollectorEntities implements EntityProvider {
   }
 
   async setupMQ() {
+    if(this.channel){
+      this.logger.warn(`Refreshed ${this.getProviderName()}: channel already initialized`)
+      return
+    }
+
     const rmq_url = this.config.getOptionalString('message_queue.rabbitmq.url')
     const rmq_vhost = this.config.getOptionalString('message_queue.rabbitmq.vhost')
     let RABBITMQ_URL: string;
@@ -96,6 +101,7 @@ export class CollectorEntities implements EntityProvider {
       await this.channel.assertQueue(DLX_QUEUE, { durable: true });
       await this.channel.bindQueue(DLX_QUEUE, DLX_EXCHANGE, 'dlx_key');
 
+      this.logger.info(`Refreshed ${this.getProviderName()}: Channel was initialized: ${this.channel}`);
     } catch (error) {
       this.logger.error(`Refreshed ${this.getProviderName()}: Error setting up RabbitMQ: ${error}`);
     }
@@ -108,6 +114,7 @@ export class CollectorEntities implements EntityProvider {
       this.logger.error('Channel is not initialized');
       throw new Error('Channel not initialized');
     }
+
     const expectedHeaderKey: string = this.config.getOptionalString('message_queue.infra_as_code.filter_header') || '';
 
     const MAIN_QUEUE = this.config.getOptionalString('message_queue.infra_as_code.queue');

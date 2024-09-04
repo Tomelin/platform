@@ -70,7 +70,7 @@ export function createAzureKeyVaultAction(config: Config) {
         );  
       }
       
-      const result = config.getOptionalConfigArray('azure.credentials') ?? []
+      const result = config.getOptionalConfigArray('cloud.azure.credentials') ?? []
 
       const keyValuePairs = result.map(item => {
         console.log(item)
@@ -97,8 +97,8 @@ export function createAzureKeyVaultAction(config: Config) {
       if (ctx.input.vaultName !== undefined && ctx.input.vaultName === ""){
         vaultName = ctx.input.vaultName 
       }
-      else if (config.getOptionalString('azure.cloud.keyvault') !== undefined && config.getOptionalString('azure.cloud.keyvault') !== ""){
-        vaultName = config.getOptionalString('azure.cloud.keyvault') || "";
+      else if (config.getOptionalString('cloud.azure.keyvault') !== undefined && config.getOptionalString('cloud.azure.keyvault') !== ""){
+        vaultName = config.getOptionalString('cloud.azure.keyvault') || "";
       }else{
         ctx.logger.error("The secret to access the vault has not been set up.")
         throw new Error("Azure Key Vault did not informed")
