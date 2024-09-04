@@ -72,18 +72,19 @@ export function createAzureKeyVaultAction(config: Config) {
       
       const result = config.getOptionalConfigArray('cloud.azure.credentials') ?? []
 
-      const keyValuePairs = result.map(item => {
-        console.log(item)
-        console.log(typeof item)
-        ctx.logger.info(item)
-        ctx.logger.info(typeof item)
-        ctx.logger.info(Object.entries(item))
-       return  Object.entries(item)
-  });
-      ctx.logger.info(keyValuePairs);
-      ctx.logger.info(JSON.stringify( result))
-      ctx.logger.info(JSON.stringify(result[0]))
-      ctx.logger.info(result.length)
+  //     const keyValuePairs = result.map(item => {
+  //       console.log(item)
+  //       console.log(typeof item)
+  //       ctx.logger.info(item)
+  //       ctx.logger.info(typeof item)
+  //       ctx.logger.info(Object.entries(item))
+  //      return  Object.entries(item)
+  // });
+  //     ctx.logger.info(keyValuePairs);
+  //     ctx.logger.info(JSON.stringify( result))
+  //     ctx.logger.info(JSON.stringify(result[0]))
+  //     ctx.logger.info(result.length)
+
       if (result.length !== 0){
         ctx.logger.info(`${result.length} secrets found`)
       }else{
@@ -120,7 +121,6 @@ export function createAzureKeyVaultAction(config: Config) {
         ctx.logger.error("The subscription has not been set up.")
         throw new Error("Azure subscription did not informed")
       } 
-
       
       ctx.logger.info(
         `The vault name was established with: ${vaultName}`,
