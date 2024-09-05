@@ -6,6 +6,6 @@ export interface AzureCredentials {
 }
 
 export interface CloudCredentials {
-  credentials: AzureCredentials;
+  data: AzureCredentials;
   vault: string;
 }

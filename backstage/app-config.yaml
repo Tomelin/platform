@@ -151,7 +151,7 @@ cloud:
         client_secret: ${AZURE_CLIENT_SECRET}
         subscription: ${AZURE_SUBSCRIPTION_ID}
         tenant: ${AZURE_TENANT_ID}
-    keyvault: ${AZURE_KEYVAULT}
+    vault: ${AZURE_KEYVAULT}
 
 message_queue:
   rabbitmq:

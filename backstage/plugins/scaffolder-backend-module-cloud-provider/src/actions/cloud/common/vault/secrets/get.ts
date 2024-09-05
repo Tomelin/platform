@@ -3,7 +3,7 @@ import { Config } from '@backstage/config';
 import { Logger } from 'winston';
 import axios from 'axios';
 import qs from 'qs';
-import { AzureAccessToken, CloudCredentials, AzureSecret, AzureSecrets, CloudSecrets } from '../interface';
+import { AzureAccessToken, CloudCredentials, AzureSecret, AzureSecrets, CloudSecrets, AzureCredentials } from '../interface';
 import {  } from '../interface/azureSecrets';
 
 /**
@@ -40,64 +40,43 @@ export function cloudVaultSecretGet(config: Config) {
     },
     async handler(ctx) {
       
-      if ((ctx.input.cloudProvider !== 'azure') && (ctx.input.cloudProvider !== 'aws')) {
+      if ((ctx.input.cloudProvider.toLowerCase() !== 'azure') && (ctx.input.cloudProvider.toLowerCase() !== 'aws')) {
         ctx.logger.error(
           `The cloud provider not found.`,
         );
-        throw new Error("Credentials not found");
+        throw new Error("The cloud provider not found.");
       }
       
       const { cloudProvider } = ctx.input
 
-      const result1 = config.getOptionalConfigArray('cloud.azure.credentials') ?? []
-      ctx.logger.info(JSON.stringify(result1))
-      const result2 = config.getOptionalConfigArray('cloud.azure') ?? []
-      ctx.logger.info(JSON.stringify(result2))
-      const azure1  = config.getOptionalConfigArray(`azure`) 
-      ctx.logger.info(JSON.stringify(azure1))
-      const azure  = config.getOptionalConfigArray(`azure.credentials`) 
-      ctx.logger.info(JSON.stringify(azure))
-      const cloud1 = config.getOptionalConfigArray(`cloud`)
-      ctx.logger.info(JSON.stringify(cloud1))
-      const cloud: CloudCredentials[] = config.getOptionalConfigArray(`cloud.${cloudProvider.toLowerCase()}`) as unknown as CloudCredentials[] || []
-      const cloud2: CloudCredentials = config.getOptionalConfigArray(`cloud.${cloudProvider.toLowerCase()}`) as unknown as CloudCredentials || {}
+      const result = config.getOptionalConfigArray(`cloud.${cloudProvider.toLowerCase()}.credentials`) as unknown as CloudCredentials[] || []
+      if (!result){
+        throw new Error("Credentials not found")
+      }
+      const cloud = result[0]
+      ctx.logger.info("Credentials were found.")
 
-      // if (cloud.length == 0 || ){
+      cloud.vault = config.getOptionalString(`cloud.${cloudProvider.toLowerCase()}.vault`) || ''
+      if (!cloud.vault){
+        throw new Error("Vault not found")
+      }
+      ctx.logger.info("Vault was found.")
 
-      //   throw new Error("Credentials not found")
-      // }
-
-ctx.logger.info(JSON.stringify(cloud))
-ctx.logger.info(JSON.stringify(cloud2))
-throw new Error("Credentials not found")
-// if (cloud.length === 0 || !cloud.some(c => c.credentials && c.credentials.clientId)) {
-//   throw new Error("Credentials not found");
-// }
-
-      const result = cloud.credentials
-
-      let credentials: CloudCredentials =  result[0]['data']
-      
-      
-      // ################ STARTS VALIDATIONS ################  
-      if (cloud.vault){
-        ctx.logger.info(`${cloud.vault} Vault was found.`)
-      }else{
-        ctx.logger.error("The secret to access the vault has not been set up.")
-        throw new Error(`Vault was not found in ${cloudProvider}.`)
-      } 
-      
-
-      let secrets;
+      ctx.logger.info(`collecting secrets from ${cloudProvider}`)
+      let secrets: AzureSecrets;
       if (cloudProvider.toLowerCase() === 'azure'){
-        secrets = await azureVaultSecretsGet(cloud)
+        secrets = await azureVaultSecretsGet(ctx.logger, cloud)
       }else if (cloudProvider.toLowerCase() === 'aws'){
         secrets= await awsVaultSecretsGet(cloud)
       }
       
-      secrets.value.map((value) => {
-          ctx.output(value.tags['field'],value['value'] )
-        })
+      await Promise.all(secrets.value.map((value) => {
+          console.log(value.tags['field'],value.value)
+          ctx.output(value.tags['field'],value.value)
+        }))
+
+        throw new Error(".... not found")
+
       await new Promise(resolve => setTimeout(resolve, 1000));
     },
   });
@@ -105,7 +84,7 @@ throw new Error("Credentials not found")
 
 
 
-const getAzureToken = async(credentials: CloudCredentials) => {
+const getAzureToken = async(credentials: AzureCredentials) => {
 
   let data = qs.stringify({
     'grant_type': 'client_credentials',
@@ -134,7 +113,28 @@ const getAzureToken = async(credentials: CloudCredentials) => {
   return token
 }
 
-const azureVaultSecretsGet = async(cloud: CloudCredentials) => <CloudSecrets>{}
+const azureVaultSecretsGet = async(logger: Logger ,cloud: CloudCredentials): Promise<AzureSecrets> => {
+
+  if (!cloud.data.client_id || !cloud.data.client_secret || !cloud.data.subscription || !cloud.data.tenant){
+    throw new Error(`The credentials not valid`)
+  }
+
+  const token: AzureAccessToken = await getAzureToken(cloud.data)
+
+  if (token.access_token === undefined && token.access_token === ""){
+    logger.error(`Azure access token is empty or undefined ${token.access_token}`)
+    throw new Error(`Azure access token is empty or undefined ${token.access_token}`)
+  }
+
+  const secrets: AzureSecrets = await getAzureKeyVaultSecrets(cloud.vault, token.access_token)
+
+  await Promise.all(secrets.value.map(async (secret) =>{
+    const result = await getAzureKeyVaultSecret(secret.id, token.access_token);
+    secret.value = result.value;
+  }))
+
+  return secrets
+}
 
 const awsVaultSecretsGet = async(cloud: CloudCredentials) => <CloudSecrets>{}
 const getAzureKeyVaultSecrets = async(vault: string, accessToken: string) => {
