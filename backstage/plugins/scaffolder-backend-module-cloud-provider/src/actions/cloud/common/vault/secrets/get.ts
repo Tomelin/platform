@@ -4,10 +4,10 @@ import { Logger } from 'winston';
 import axios from 'axios';
 import qs from 'qs';
 import { AzureAccessToken, CloudCredentials, AzureSecret, AzureSecrets, CloudSecrets, AzureCredentials } from '../interface';
-import {  } from '../interface/azureSecrets';
+import { } from '../interface/azureSecrets';
 
 /**
- * Creates an `azure:keyvault` Scaffolder action.
+ * Creates an `cloud:vault:get` Scaffolder action.
  *
  * @remarks
  *
@@ -22,7 +22,7 @@ export function cloudVaultSecretGet(config: Config) {
     cloudProvider: string;
   }>({
     id: 'cloud:vault:get',
-    description: 'Get secret from Azure Key Vault',
+    description: 'Get secret from cloud provider',
     schema: {
       input: {
         required: [
@@ -39,43 +39,44 @@ export function cloudVaultSecretGet(config: Config) {
       },
     },
     async handler(ctx) {
-      
+
       if ((ctx.input.cloudProvider.toLowerCase() !== 'azure') && (ctx.input.cloudProvider.toLowerCase() !== 'aws')) {
         ctx.logger.error(
           `The cloud provider not found.`,
         );
         throw new Error("The cloud provider not found.");
       }
-      
+
       const { cloudProvider } = ctx.input
 
       const result = config.getOptionalConfigArray(`cloud.${cloudProvider.toLowerCase()}.credentials`) as unknown as CloudCredentials[] || []
-      if (!result){
+      if (!result) {
         throw new Error("Credentials not found")
       }
       const cloud = result[0]
       ctx.logger.info("Credentials were found.")
 
       cloud.vault = config.getOptionalString(`cloud.${cloudProvider.toLowerCase()}.vault`) || ''
-      if (!cloud.vault){
+      if (!cloud.vault) {
         throw new Error("Vault not found")
       }
       ctx.logger.info("Vault was found.")
 
       ctx.logger.info(`collecting secrets from ${cloudProvider}`)
-      let secrets: AzureSecrets;
-      if (cloudProvider.toLowerCase() === 'azure'){
+      let secrets: AzureSecrets | undefined;
+      if (cloudProvider.toLowerCase() === 'azure') {
         secrets = await azureVaultSecretsGet(ctx.logger, cloud)
-      }else if (cloudProvider.toLowerCase() === 'aws'){
-        secrets= await awsVaultSecretsGet(cloud)
+      } else if (cloudProvider.toLowerCase() === 'aws') {
+        secrets = await awsVaultSecretsGet(cloud)
       }
-      
-      await Promise.all(secrets.value.map((value) => {
-          console.log(value.tags['field'],value.value)
-          ctx.output(value.tags['field'],value.value)
-        }))
 
-        throw new Error(".... not found")
+      if (secrets){
+        await Promise.all(secrets.value.map((value) => {
+          ctx.output(value.tags['field'], value.value)
+        }))
+      }else{
+        ctx.logger.error(`secrets were not collected from ${cloudProvider}`);
+      }
 
       await new Promise(resolve => setTimeout(resolve, 1000));
     },
@@ -83,8 +84,7 @@ export function cloudVaultSecretGet(config: Config) {
 }
 
 
-
-const getAzureToken = async(credentials: AzureCredentials) => {
+const getAzureToken = async (credentials: AzureCredentials) => {
 
   let data = qs.stringify({
     'grant_type': 'client_credentials',
@@ -92,43 +92,43 @@ const getAzureToken = async(credentials: AzureCredentials) => {
     'client_id': credentials.client_id,
     'client_secret': credentials.client_secret
   });
-  
+
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
     url: `https://login.microsoftonline.com/${credentials.tenant}/oauth2/v2.0/token`,
-    headers: { 
+    headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    data : data
+    data: data
   };
-  
+
   const token = await axios.request(config)
-  .then((response) => {
-    return response.data
-  })
-  .catch((error) => {
-    throw new Error(error)
-  });
+    .then((response) => {
+      return response.data
+    })
+    .catch((error) => {
+      throw new Error(error)
+    });
   return token
 }
 
-const azureVaultSecretsGet = async(logger: Logger ,cloud: CloudCredentials): Promise<AzureSecrets> => {
+const azureVaultSecretsGet = async (logger: Logger, cloud: CloudCredentials): Promise<AzureSecrets> => {
 
-  if (!cloud.data.client_id || !cloud.data.client_secret || !cloud.data.subscription || !cloud.data.tenant){
+  if (!cloud.data.client_id || !cloud.data.client_secret || !cloud.data.subscription || !cloud.data.tenant) {
     throw new Error(`The credentials not valid`)
   }
 
   const token: AzureAccessToken = await getAzureToken(cloud.data)
 
-  if (token.access_token === undefined && token.access_token === ""){
+  if (token.access_token === undefined && token.access_token === "") {
     logger.error(`Azure access token is empty or undefined ${token.access_token}`)
     throw new Error(`Azure access token is empty or undefined ${token.access_token}`)
   }
 
   const secrets: AzureSecrets = await getAzureKeyVaultSecrets(cloud.vault, token.access_token)
 
-  await Promise.all(secrets.value.map(async (secret) =>{
+  await Promise.all(secrets.value.map(async (secret) => {
     const result = await getAzureKeyVaultSecret(secret.id, token.access_token);
     secret.value = result.value;
   }))
@@ -136,50 +136,49 @@ const azureVaultSecretsGet = async(logger: Logger ,cloud: CloudCredentials): Pro
   return secrets
 }
 
-const awsVaultSecretsGet = async(cloud: CloudCredentials) => <CloudSecrets>{}
-const getAzureKeyVaultSecrets = async(vault: string, accessToken: string) => {
-
+const awsVaultSecretsGet = async (cloud: CloudCredentials) => <CloudSecrets>{}
+const getAzureKeyVaultSecrets = async (vault: string, accessToken: string) => {
 
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
     url: `https://${vault}.vault.azure.net/secrets?api-version=7.2`,
-    headers: { 
+    headers: {
       'Authorization': `Bearer ${accessToken}`
     }
   };
-  
+
   const result = await axios.request(config)
-  .then((response) => {
-    return response.data
-  })
-  .catch((error) => {
-    throw new Error(error)
-  });
+    .then((response) => {
+      return response.data
+    })
+    .catch((error) => {
+      throw new Error(error)
+    });
 
   return result
-  
+
 }
 
-const getAzureKeyVaultSecret = async(vault: string, accessToken: string) => {
+const getAzureKeyVaultSecret = async (vault: string, accessToken: string) => {
 
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
     url: `${vault}?api-version=7.2`,
-    headers: { 
+    headers: {
       'Authorization': `Bearer ${accessToken}`
     }
   };
-  
-  const result:AzureSecret = await axios.request(config)
-  .then((response) => {
-    return response.data
-  })
-  .catch((error) => {
-    throw new Error(error)
-  });
+
+  const result: AzureSecret = await axios.request(config)
+    .then((response) => {
+      return response.data
+    })
+    .catch((error) => {
+      throw new Error(error)
+    });
 
   return result
-  
+
 }
