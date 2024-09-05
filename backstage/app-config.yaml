@@ -136,6 +136,14 @@ auth:
 scaffolder: {}
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
+azure:
+  credentials:
+    - client_id: ${AZURE_CLIENT_ID}
+      client_secret: ${AZURE_CLIENT_SECRET}
+      subscription: ${AZURE_SUBSCRIPTION_ID}
+      tenant: ${AZURE_TENANT_ID}
+  keyvault: ${AZURE_KEYVAULT}
+
 cloud:
   azure:
     credentials:

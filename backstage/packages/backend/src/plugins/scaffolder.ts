@@ -4,7 +4,7 @@ import { Router } from 'express';
 import type { PluginEnvironment } from '../types';
 import { ScmIntegrations } from '@backstage/integration';
 import { createAzureKeyVaultAction } from '@internal/backstage-plugin-scaffolder-backend-module-azure-resources';
-
+import { cloudVaultSecretGet } from '@internal/backstage-plugin-scaffolder-backend-module-cloud-provider';
 export default async function createPlugin(
   env: PluginEnvironment,
 ): Promise<Router> {
@@ -23,6 +23,7 @@ export default async function createPlugin(
   const actions = [
     ...builtInActions,
     createAzureKeyVaultAction(env.config),
+    cloudVaultSecretGet(env.config),
   ];
 
   return await createRouter({

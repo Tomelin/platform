@@ -3,8 +3,8 @@ import { Config } from '@backstage/config';
 import { Logger } from 'winston';
 import axios from 'axios';
 import qs from 'qs';
-import { AzureAccessToken, AzureCredentials, AzureKeyVault } from '../../interface';
-import { AzureSecret, AzureSecrets } from '../../interface/azureSecrets';
+import { AzureAccessToken, AzureCredentials, AzureKeyVault } from '../interface';
+import { AzureSecret, AzureSecrets } from '../interface/azureSecrets';
 
 interface AzureConfig {
   credentials: AzureCredentials[];
@@ -16,7 +16,7 @@ interface DataConfig {
 }
 
 /**
- * Creates an `azure:keyvault` Scaffolder action.
+ * Creates an `cloud:azure:vault:get` Scaffolder action.
  *
  * @remarks
  *
@@ -24,7 +24,7 @@ interface DataConfig {
  *
  * @public
  */
-export function createAzureKeyVaultAction(config: Config) {
+export function cloudVaultSecretGet(config: Config) {
   // For more information on how to define custom actions, see
   //   https://backstage.io/docs/features/software-templates/writing-custom-actions
   return createTemplateAction<{
@@ -32,7 +32,7 @@ export function createAzureKeyVaultAction(config: Config) {
     vaultName: string;
     subscription: string;
   }>({
-    id: 'azure:keyvault',
+    id: 'cloud:vault:get',
     description: 'Get secret from Azure Key Vault',
     schema: {
       input: {
@@ -71,20 +71,6 @@ export function createAzureKeyVaultAction(config: Config) {
       }
       
       const result = config.getOptionalConfigArray('cloud.azure.credentials') ?? []
-      ctx.logger.info(JSON.stringify(result))
-      throw new Error("Credentials not found")
-  //     const keyValuePairs = result.map(item => {
-  //       console.log(item)
-  //       console.log(typeof item)
-  //       ctx.logger.info(item)
-  //       ctx.logger.info(typeof item)
-  //       ctx.logger.info(Object.entries(item))
-  //      return  Object.entries(item)
-  // });
-  //     ctx.logger.info(keyValuePairs);
-  //     ctx.logger.info(JSON.stringify( result))
-  //     ctx.logger.info(JSON.stringify(result[0]))
-  //     ctx.logger.info(result.length)
 
       if (result.length !== 0){
         ctx.logger.info(`${result.length} secrets found`)
