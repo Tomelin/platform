@@ -55,22 +55,6 @@ jobs:
       run: yarn --cwd packages/backend build  
       working-directory: ./backstage
 
-    # - name: Yarn build image
-    #   run: |
-    #     export DOCKER_BUILDKIT=1
-    #     yarn build-image
-    #   working-directory: ./backstage
-
-    # - name: Create tagPublish the image
-    #   run: |
-    #     docker tag backstage:latest ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}
-    #   working-directory: ./
-
-    # - name: Publish the image
-    #   run: |
-    #     docker push ${{ env.registry_host }}/${{ env.registry_username }}/${{ env.contaner_name }}:${{ steps.container_id.outputs.ID }}
-    #   working-directory: ./
-
     - name: Build and push
       uses: docker/build-push-action@v6
       with:

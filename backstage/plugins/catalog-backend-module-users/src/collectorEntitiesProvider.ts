@@ -193,9 +193,9 @@ export class CollectorEntities implements EntityProvider {
     }
 
 try{
-  entities.map((entity: Entity) => (
-    this.logger.warn(`${entity.metadata.name} resource will be register`)
-  ));
+    entities.map((entity: Entity) => (
+      this.logger.warn(`${entity.metadata.name} resource will be register`)
+    ));
 
     await this.connection.applyMutation({
       type: 'full',
@@ -208,6 +208,10 @@ try{
     this.logger.info(
       `Refreshed ${this.getProviderName()}: ${entities.length} entities added`,
     );
+    this.logger.info(
+      `Refreshed ${this.getProviderName()}: ${JSON.stringify(entities)} entities added`,
+    );
+    
   }catch{
     this.logger.error(
       `Error ${this.getProviderName()}: ${entities.length} for include`,
@@ -224,6 +228,21 @@ try{
     return typeof obj === 'object' && obj !== null && 'kind' in obj && 'metadata' in obj && 'spec' in obj;
   }
 
+  // async mutation(entity: DeferredEntity){
+    
+  //   await this.connection.applyMutation({
+  //     type: 'full',
+  //     entities: [entity],
+  //     //  entities.map((entity: Entity) => ({
+  //       // entity,
+  //       // locationKey: this.getProviderName(),
+  //     // })),
+  //   });
+
+  //   this.logger.info(
+  //     `Refreshed ${this.getProviderName()}: ${entities.length} entities added`,
+  //   );
+  // }
 
   async connect(connection: EntityProviderConnection): Promise<void> {
     this.connection = connection;
