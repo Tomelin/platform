@@ -61,7 +61,7 @@ export class CollectorEntities implements EntityProvider {
   }
 
   async setupMQ() {
-    if(this.channel){
+    if (this.channel) {
       this.logger.warn(`Refreshed ${this.getProviderName()}: channel already initialized`)
       return
     }
@@ -172,7 +172,7 @@ export class CollectorEntities implements EntityProvider {
         entity.apiVersion = "backstage.io/v1alpha1";
         entity.metadata.annotations = {
           'backstage.io/managed-by-location': `url:http://${entity.metadata.name}`,
-        'backstage.io/managed-by-origin-location': `url:http://${entity.metadata.name}`,
+          'backstage.io/managed-by-origin-location': `url:http://${entity.metadata.name}`,
         };
         this.logger.info(`${entity.metadata.name} resource was received`)
       });
@@ -183,7 +183,7 @@ export class CollectorEntities implements EntityProvider {
         'backstage.io/managed-by-location': `url:http://${temp.metadata.name}`,
         'backstage.io/managed-by-origin-location': `url:http://${temp.metadata.name}`,
       },
-      temp.apiVersion = "backstage.io/v1alpha1";
+        temp.apiVersion = "backstage.io/v1alpha1";
       this.logger.info(`${temp.metadata.name} resource was received`)
 
       this.logger.warn('The message is:')
@@ -192,29 +192,37 @@ export class CollectorEntities implements EntityProvider {
       entities.push(temp)
     }
 
-try{
+    try {
 
-  await this.connection.applyMutation({
-    type: 'full',
-    entities: entities.map((entity: Entity) => ({
-      entity,
-      locationKey: `${this.getProviderName()}/${entity.metadata.name}`,
-    })),
-  });
+      await this.connection.applyMutation({
+        type: 'full',
+        entities: entities.map((entity: Entity) => ({
+          entity,
+          locationKey: this.getProviderName(),
+        })),
+      });
 
+      const timestamp = Date.now();
+      await this.connection.applyMutation({
+        type: 'full',
+        entities: entities.map((entity: Entity) => ({
+          entity,
+          locationKey: `${this.getProviderName()}/${timestamp}`,
+        })),
+      });
 
-    this.logger.info(
-      `Refreshed ${this.getProviderName()}: ${entities.length} entities added`,
-    );
-    this.logger.info(
-      `Refreshed ${this.getProviderName()}: ${JSON.stringify(entities)} entities added`,
-    );
-    
-  }catch{
-    this.logger.error(
-      `Error ${this.getProviderName()}: ${entities.length} for include`,
-    );
-  }
+      this.logger.info(
+        `Refreshed ${this.getProviderName()}: ${entities.length} entities added`,
+      );
+      this.logger.info(
+        `Refreshed ${this.getProviderName()}: ${JSON.stringify(entities)} entities added`,
+      );
+
+    } catch {
+      this.logger.error(
+        `Error ${this.getProviderName()}: ${entities.length} for include`,
+      );
+    }
   }
 
   isEntity(obj: any): boolean {
@@ -227,7 +235,7 @@ try{
   }
 
   // async mutation(entity: DeferredEntity){
-    
+
   //   await this.connection.applyMutation({
   //     type: 'full',
   //     entities: [entity],
