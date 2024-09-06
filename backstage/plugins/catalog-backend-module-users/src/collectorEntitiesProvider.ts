@@ -171,7 +171,7 @@ export class CollectorEntities implements EntityProvider {
       entities.forEach((entity: Entity) => {
         entity.apiVersion = "backstage.io/v1alpha1";
         entity.metadata.annotations = {
-          'backstage.io/managed-by-location': `url:ok`,
+          'backstage.io/managed-by-location': `url:${entity.metadata.name}`,
           'backstage.io/managed-by-origin-location': `url:ok/${entity.metadata.name}`,
         };
       });
@@ -179,7 +179,7 @@ export class CollectorEntities implements EntityProvider {
     } else {
       const temp = data as unknown as Entity
       temp.metadata.annotations = {
-        'backstage.io/managed-by-location': `url:ok`,
+        'backstage.io/managed-by-location': `url:${temp.metadata.name}`,
         'backstage.io/managed-by-origin-location': `url:ok/${temp.metadata.name}`,
       },
       temp.apiVersion = "backstage.io/v1alpha1";
