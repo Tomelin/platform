@@ -174,6 +174,7 @@ export class CollectorEntities implements EntityProvider {
           'backstage.io/managed-by-location': `url:${entity.metadata.name}`,
           'backstage.io/managed-by-origin-location': `url:ok/${entity.metadata.name}`,
         };
+        this.logger.info(`${entity.metadata.name} resource was received`)
       });
 
     } else {
@@ -183,6 +184,7 @@ export class CollectorEntities implements EntityProvider {
         'backstage.io/managed-by-origin-location': `url:ok/${temp.metadata.name}`,
       },
       temp.apiVersion = "backstage.io/v1alpha1";
+      this.logger.info(`${temp.metadata.name} resource was received`)
 
       this.logger.warn('The message is:')
       this.logger.warn(JSON.stringify(temp));
@@ -191,6 +193,10 @@ export class CollectorEntities implements EntityProvider {
     }
 
 try{
+  entities.map((entity: Entity) => (
+    this.logger.warn(`${entity.metadata.name} resource will be register`)
+  ));
+
     await this.connection.applyMutation({
       type: 'full',
       entities: entities.map((entity: Entity) => ({
