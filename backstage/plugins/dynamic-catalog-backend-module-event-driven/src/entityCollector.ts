@@ -168,24 +168,32 @@ export class EntityCollector implements EntityProvider {
       entities = data as unknown as Entity[]
       entities.forEach((entity: Entity) => {
         entity.apiVersion = "backstage.io/v1alpha1";
-        entity.metadata.annotations = {
-          'backstage.io/managed-by-location': `url:http://catalog-demo.synera.com.br/${entity.metadata.namespace || "default"}/${entity.kind}/${entity.metadata.name}`,
-          'backstage.io/managed-by-origin-location': `url:http://catalog-demo.synera.com.br/${entity.metadata.namespace || "default"}/${entity.kind}/${entity.metadata.name}`,
-        };
+        if (entity.metadata.annotations){
+          entity.metadata.annotations['backstage.io/managed-by-location'] = `url:http://catalog-demo.synera.com.br/${entity.metadata.namespace?.toLowerCase() || "default"}/${entity.kind.toLowerCase()}/${entity.metadata.name.toLowerCase()}`
+          entity.metadata.annotations['backstage.io/managed-by-origin-location'] = `url:http://catalog-demo.synera.com.br/${entity.metadata.namespace?.toLowerCase() || "default"}/${entity.kind.toLowerCase()}/${entity.metadata.name.toLowerCase()}`
+        }else{
+          entity.metadata.annotations = {
+            'backstage.io/managed-by-location': `url:http://catalog-demo.synera.com.br/${entity.metadata.namespace?.toLowerCase()|| "default"}/${entity.kind.toLowerCase()}/${entity.metadata.name.toLowerCase()}`,
+            'backstage.io/managed-by-origin-location': `url:url:http://catalog-demo.synera.com.br/${entity.metadata.namespace?.toLowerCase()|| "default"}/${entity.kind.toLowerCase()}/${entity.metadata.name.toLowerCase()}`,
+          }
+        }
+        
         this.logger.info(`${entity.metadata.name} resource was received`)
       });
 
     } else {
       const temp = data as unknown as Entity
-      temp.metadata.annotations = {
-        'backstage.io/managed-by-location': `url:http://catalog-demo.synera.com.br/${temp.metadata.namespace|| "default"}/${temp.kind}/${temp.metadata.name}`,
-        'backstage.io/managed-by-origin-location': `url:url:http://catalog-demo.synera.com.br/${temp.metadata.namespace|| "default"}/${temp.kind}/${temp.metadata.name}`,
-      },
+      if (temp.metadata.annotations){
+        temp.metadata.annotations['backstage.io/managed-by-location'] = `url:http://catalog-demo.synera.com.br/${temp.metadata.namespace?.toLowerCase() || "default"}/${temp.kind.toLowerCase()}/${temp.metadata.name.toLowerCase()}`
+        temp.metadata.annotations['backstage.io/managed-by-origin-location'] = `url:http://catalog-demo.synera.com.br/${temp.metadata.namespace?.toLowerCase() || "default"}/${temp.kind.toLowerCase()}/${temp.metadata.name.toLowerCase()}`
+      }else{
+        temp.metadata.annotations = {
+          'backstage.io/managed-by-location': `url:http://catalog-demo.synera.com.br/${temp.metadata.namespace?.toLowerCase()|| "default"}/${temp.kind.toLowerCase()}/${temp.metadata.name.toLowerCase()}`,
+          'backstage.io/managed-by-origin-location': `url:url:http://catalog-demo.synera.com.br/${temp.metadata.namespace?.toLowerCase()|| "default"}/${temp.kind.toLowerCase()}/${temp.metadata.name.toLowerCase()}`,
+        }
+      }
         temp.apiVersion = "backstage.io/v1alpha1";
       this.logger.info(`${temp.metadata.name} resource was received`)
-
-      this.logger.warn('The message is:')
-      this.logger.warn(JSON.stringify(temp));
 
       entities.push(temp)
     }
@@ -202,9 +210,6 @@ export class EntityCollector implements EntityProvider {
 
       this.logger.info(
         `Refreshed ${this.getProviderName()}: ${entities.length} entities added`,
-      );
-      this.logger.info(
-        `Refreshed ${this.getProviderName()}: ${JSON.stringify(entities)} entities added`,
       );
 
     } catch {
