@@ -41,6 +41,7 @@
     "@backstage/plugin-search-backend-node": "^1.2.26",
     "@backstage/plugin-techdocs-backend": "^1.10.8",
     "@internal/backstage-plugin-catalog-backend-module-rabbitmq": "^0.1.0",
+    "@internal/backstage-plugin-dynamic-catalog-backend-module-event-driven": "^0.1.0",
     "@internal/backstage-plugin-scaffolder-backend-module-azure-resources": "^1.0.0",
     "@internal/backstage-plugin-scaffolder-backend-module-cloud-provider": "^0.1.0",
     "@internal/plugin-catalog-backend-module-users": "^0.1.0",
