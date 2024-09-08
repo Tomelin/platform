@@ -3,7 +3,7 @@ import { createBuiltinActions, createRouter } from '@backstage/plugin-scaffolder
 import { Router } from 'express';
 import type { PluginEnvironment } from '../types';
 import { ScmIntegrations } from '@backstage/integration';
-// import { cloudVaultSecretGet } from '@internal/backstage-plugin-scaffolder-backend-module-cloud-provider';
+import { cloudVaultSecretGet } from '@internal/backstage-plugin-scaffolder-backend-module-cloud-provider';
 
 export default async function createPlugin(
   env: PluginEnvironment,
@@ -22,7 +22,7 @@ export default async function createPlugin(
 
   const actions = [
     ...builtInActions,
-    // cloudVaultSecretGet(env.config),
+    cloudVaultSecretGet(env.config),
   ];
 
   return await createRouter({

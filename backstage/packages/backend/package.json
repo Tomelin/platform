@@ -41,6 +41,7 @@
     "@backstage/plugin-search-backend-node": "^1.2.26",
     "@backstage/plugin-techdocs-backend": "^1.10.8",
     "@janus-idp/backstage-plugin-keycloak-backend": "^1.11.1",
+    "@internal/backstage-plugin-scaffolder-backend-module-cloud-provider": "^0.1.0",
     "amqplib": "^0.10.4",
     "app": "link:../app",
     "better-sqlite3": "^9.0.0",
