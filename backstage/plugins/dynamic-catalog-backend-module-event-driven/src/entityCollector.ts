@@ -169,8 +169,8 @@ export class EntityCollector implements EntityProvider {
       entities.forEach((entity: Entity) => {
         entity.apiVersion = "backstage.io/v1alpha1";
         entity.metadata.annotations = {
-          'backstage.io/managed-by-location': `url:http://catalog-demo.synera.com.br/${entity.metadata.namespace}/${entity.kind}/${entity.metadata.name}`,
-          'backstage.io/managed-by-origin-location': `url:http://catalog-demo.synera.com.br/${entity.metadata.namespace}/${entity.kind}/${entity.metadata.name}`,
+          'backstage.io/managed-by-location': `url:http://catalog-demo.synera.com.br/${entity.metadata.namespace || "default"}/${entity.kind}/${entity.metadata.name}`,
+          'backstage.io/managed-by-origin-location': `url:http://catalog-demo.synera.com.br/${entity.metadata.namespace || "default"}/${entity.kind}/${entity.metadata.name}`,
         };
         this.logger.info(`${entity.metadata.name} resource was received`)
       });
@@ -178,8 +178,8 @@ export class EntityCollector implements EntityProvider {
     } else {
       const temp = data as unknown as Entity
       temp.metadata.annotations = {
-        'backstage.io/managed-by-location': `url:http://catalog-demo.synera.com.br/${temp.metadata.namespace}/${temp.kind}/${temp.metadata.name}`,
-        'backstage.io/managed-by-origin-location': `url:url:http://catalog-demo.synera.com.br/${temp.metadata.namespace}/${temp.kind}/${temp.metadata.name}`,
+        'backstage.io/managed-by-location': `url:http://catalog-demo.synera.com.br/${temp.metadata.namespace|| "default"}/${temp.kind}/${temp.metadata.name}`,
+        'backstage.io/managed-by-origin-location': `url:url:http://catalog-demo.synera.com.br/${temp.metadata.namespace|| "default"}/${temp.kind}/${temp.metadata.name}`,
       },
         temp.apiVersion = "backstage.io/v1alpha1";
       this.logger.info(`${temp.metadata.name} resource was received`)
