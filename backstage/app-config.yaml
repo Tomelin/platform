@@ -161,9 +161,13 @@ message_queue:
     exchange: ${RMQ_DLX}
     queue: ${RMQ_DLQ}
   infra_as_code:
-    exchange: ${RMQ_IAC_EX}
-    queue: ${RMQ_IAC_QUEUE}
-    filter_header: ${RMQ_IAC_FILTER}
+    exchange: collector
+    queue: manifests
+    filter_header: backstage
+  # infra_as_code:
+  #   exchange: ${RMQ_IAC_EX}
+  #   queue: ${RMQ_IAC_QUEUE}
+  #   filter_header: ${RMQ_IAC_FILTER}
 
   
 catalog:

@@ -115,7 +115,7 @@ export class EntityCollector implements EntityProvider {
       throw new Error('Channel not initialized');
     }
 
-    const expectedHeaderKey: string = this.config.getOptionalString('message_queue.infra_as_code.filter_header') || '';
+    // const expectedHeaderKey: string = this.config.getOptionalString('message_queue.infra_as_code.filter_header') || '';
 
     const MAIN_QUEUE = this.config.getOptionalString('message_queue.infra_as_code.queue');
 
@@ -125,8 +125,8 @@ export class EntityCollector implements EntityProvider {
       this.channel.consume(MAIN_QUEUE, (msg) => {
         if (msg !== null) {
 
-          const headers = msg.properties.headers as Record<string, any>;
-          if (expectedHeaderKey in headers) {
+          // const headers = msg.properties.headers as Record<string, any>;
+          // if (expectedHeaderKey in headers) {
             try {
               const data = JSON.parse(msg.content.toString())
               if (this.isEntity(data)) {
@@ -141,10 +141,10 @@ export class EntityCollector implements EntityProvider {
               this.logger.error(`Error processing message: ${err} and message is: ${msg.content.toString()}`);
               this.channel.nack(msg, false, false); // Reject the message, no requeue
             }
-          } else {
-            this.logger.warn(`Refreshed ${this.getProviderName()}: Message without header`);
-            this.channel.nack(msg, false, false); // Rejeita a mensagem, não requeue
-          }
+          // } else {
+          //   this.logger.warn(`Refreshed ${this.getProviderName()}: Message without header`);
+          //   this.channel.nack(msg, false, false); // Rejeita a mensagem, não requeue
+          // }
 
         }
         this.logger.error(`Refreshed ${this.getProviderName()}: Message is empty or bad formed`);
